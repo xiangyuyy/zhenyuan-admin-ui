@@ -93,8 +93,8 @@
         ></el-table-column>
         <el-table-column
           prop="title"
-          label="职称"
-          width="120"
+          label="职称（获得时间)"
+          width="200"
           align="center"
         ></el-table-column>
         <el-table-column
