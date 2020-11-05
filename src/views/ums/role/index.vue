@@ -68,10 +68,10 @@
                          type="text"
                          @click="handleSelectMenu(scope.$index, scope.row)">分配菜单
               </el-button>
-              <el-button size="mini"
+              <!-- <el-button size="mini"
                          type="text"
                          @click="handleSelectResource(scope.$index, scope.row)">分配资源
-              </el-button>
+              </el-button> -->
             </el-row>
             <el-row>
             <el-button size="mini"
@@ -267,9 +267,9 @@
       handleSelectMenu(index,row){
         this.$router.push({path:'/ums/allocMenu',query:{roleId:row.id}})
       },
-      handleSelectResource(index,row){
-        this.$router.push({path:'/ums/allocResource',query:{roleId:row.id}})
-      },
+      // handleSelectResource(index,row){
+      //   this.$router.push({path:'/ums/allocResource',query:{roleId:row.id}})
+      // },
       getList() {
         this.listLoading = true;
         fetchList(this.listQuery).then(response => {

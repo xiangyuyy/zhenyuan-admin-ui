@@ -1,0 +1,93 @@
+{
+  "id": "",
+  "name": "",
+  "font_family": "iconfont",
+  "css_prefix_text": "icon-",
+  "description": "",
+  "glyphs": [
+    {
+      "icon_id": "631502",
+      "name": "查询数据列表",
+      "font_class": "querylist",
+      "unicode": "e66c",
+      "unicode_decimal": 58988
+    },
+    {
+      "icon_id": "826136",
+      "name": "管理",
+      "font_class": "guanli",
+      "unicode": "e622",
+      "unicode_decimal": 58914
+    },
+    {
+      "icon_id": "1719299",
+      "name": "人员列表",
+      "font_class": "renyuanliebiao",
+      "unicode": "e7b4",
+      "unicode_decimal": 59316
+    },
+    {
+      "icon_id": "2959123",
+      "name": "组织机构",
+      "font_class": "zuzhijigou",
+      "unicode": "e63c",
+      "unicode_decimal": 58940
+    },
+    {
+      "icon_id": "5111320",
+      "name": "人员-实",
+      "font_class": "renyuan-shi",
+      "unicode": "e670",
+      "unicode_decimal": 58992
+    },
+    {
+      "icon_id": "5111321",
+      "name": "人员-空",
+      "font_class": "renyuan-kong",
+      "unicode": "e671",
+      "unicode_decimal": 58993
+    },
+    {
+      "icon_id": "6298984",
+      "name": "人员比对",
+      "font_class": "icon-",
+      "unicode": "e668",
+      "unicode_decimal": 58984
+    },
+    {
+      "icon_id": "8651379",
+      "name": "数据录入",
+      "font_class": "shujuluru",
+      "unicode": "e64c",
+      "unicode_decimal": 58956
+    },
+    {
+      "icon_id": "8949026",
+      "name": "人员",
+      "font_class": "renyuan",
+      "unicode": "e65e",
+      "unicode_decimal": 58974
+    },
+    {
+      "icon_id": "12975229",
+      "name": "控制台",
+      "font_class": "kongzhitai",
+      "unicode": "e651",
+      "unicode_decimal": 58961
+    },
+    {
+      "icon_id": "15136578",
+      "name": "查询列表",
+      "font_class": "chaxunliebiao",
+      "unicode": "e60a",
+      "unicode_decimal": 58890
+    },
+    {
+      "icon_id": "16206719",
+      "name": "人员管理",
+      "font_class": "renyuanguanli",
+      "unicode": "e6ad",
+      "unicode_decimal": 59053
+    }
+  ]
+}
