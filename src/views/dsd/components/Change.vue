@@ -122,7 +122,7 @@
           </template>
         </el-table-column>
         <el-table-column
-          prop="fiction"
+          prop="isInvitual"
           label="是否虚拟"
           align="center"
         ></el-table-column>
