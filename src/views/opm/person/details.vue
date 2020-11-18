@@ -281,17 +281,20 @@
     <el-card shadow="never">
       <h2>药监职称</h2>
       <div>
-        <el-table :data="educationData" border style="width: 100%">
+        <el-table :data="drugInfoData" border style="width: 100%">
           <el-table-column
             prop="num"
             label="药监职称证书编号"
             align="center"
           ></el-table-column>
           <el-table-column
-            prop="time"
             label="药监职称时间"
             align="center"
-          ></el-table-column>
+          >
+           <template slot-scope="scope">
+              {{ scope.row.time | formatDateTime }}
+            </template>
+          </el-table-column>
           <el-table-column
             prop="kind"
             label="药监职称级别"

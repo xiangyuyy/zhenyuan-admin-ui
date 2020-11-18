@@ -196,15 +196,30 @@ export default {
       this.dialogVisible = false;
     },
     deletePerson(row) {
-      deleteDrugReportMember(row.id).then((res) => {
-        this.$message({
-          message: "删除成功",
-          type: "success",
+      this.$confirm("是否删除?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning",
+      })
+        .then(() => {
+          deleteDrugReportMember(row.id).then((res) => {
+            this.$message({
+              message: "删除成功",
+              type: "success",
+            });
+            const index = this.personList.findIndex(
+              (item) => item.id === row.id
+            );
+            this.personList.splice(index, 1);
+            this.getPersonList();
+          });
+        })
+        .catch(() => {
+          this.$message({
+            type: "info",
+            message: "已取消删除",
+          });
         });
-        const index = this.personList.findIndex((item) => item.id === row.id);
-        this.personList.splice(index, 1);
-        this.getPersonList();
-      });
     },
     handleSizeChange(newSize) {
       this.queryInfo.pageNum = 1;
@@ -230,14 +245,14 @@ export default {
     saveAndExport() {
       //this.showBtnDialogVisible = false;
       //this.$router.push("/dsd/console");
-       sureDrugReport({ reportId: this.queryInfo.reportId }).then((res) => {
+      sureDrugReport({ reportId: this.queryInfo.reportId }).then((res) => {
         this.$message({
           message: "保存成功",
           type: "success",
         });
         this.showBtnDialogVisible = false;
         this.$router.push("/dsd/console");
-      });     
+      });
     },
     saveNotExport() {
       // console.log(this.queryInfo.reportId);
@@ -251,13 +266,26 @@ export default {
       });
     },
     clear() {
-      deleteAllDrugReportMember(this.queryInfo.reportId).then((res) => {
-        this.$message({
-          message: "清空人员信息成功",
-          type: "success",
+      this.$confirm("是否清空?", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning",
+      })
+        .then(() => {
+          deleteAllDrugReportMember(this.queryInfo.reportId).then((res) => {
+            this.$message({
+              message: "清空人员信息成功",
+              type: "success",
+            });
+            this.personList = [];
+          });
+        })
+        .catch(() => {
+          this.$message({
+            type: "info",
+            message: "已取消删除",
+          });
         });
-        this.personList = [];
-      });
     },
     goHome() {
       this.$router.push("/home");

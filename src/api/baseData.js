@@ -23,3 +23,21 @@ export function getCodeItemListFor2() {
         method: 'get',
     })
 }
+
+
+export function updateOrAddCodeItem(data) {
+    return request({
+        url: '/member/updateOrAddCodeItem',
+        method: 'post',
+        data: data
+    })
+}
+
+
+export function deleteCodeItem(data) {
+    return request({
+        url: '/member/deleteCodeItem',
+        method: 'post',
+        data: data
+    })
+}
