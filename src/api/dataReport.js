@@ -16,3 +16,13 @@ export function getMemberRecordList(params) {
         params: params
     })
 }
+
+
+// 部门申报变更记录查询列表
+export function getShopMemberRecordList(params) {
+    return request({
+        url: '/dataReport/getShopMemberRecordList',
+        method: 'get',
+        params: params
+    })
+}

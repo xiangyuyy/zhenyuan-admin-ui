@@ -2,19 +2,19 @@
   <div class="app-container">
     <el-card shadow="never">
       <el-row :gutter="20">
-        <el-col :span="6">
+        <el-col :span="4">
           <label>单号</label>
           <span>{{ headerInfo.id }}</span>
         </el-col>
-        <el-col :span="6">
+        <el-col :span="4">
           <label>门店</label>
           <span>{{ headerInfo.shopName }}</span>
         </el-col>
-        <el-col :span="4">
+        <el-col :span="3">
           <label>操作员</label>
           <span>{{ headerInfo.operatorName }}</span>
         </el-col>
-        <el-col :span="6">
+        <el-col :span="5">
           <label>日期</label>
           <el-date-picker
             v-model="headerInfo.reportTime"
@@ -22,6 +22,47 @@
             placeholder="选择日期时间"
           >
           </el-date-picker>
+        </el-col>
+        <el-col :span="8">
+          <div class="tool">
+            <div class="tool-left">
+              <div class="toolFormLabel">
+                <label>行政隶属</label>
+                <span>{{ toolForm.subjection }}</span>
+              </div>
+              <div class="toolFormLabel">
+                <label>有无中药</label>
+                <span>{{ toolForm.chineseMedicine }}</span>
+              </div>
+              <div class="toolFormLabel">
+                <label>是否远程</label>
+                <span>{{ toolForm.longRange }}</span>
+              </div>
+              <div class="area">
+                <label>药品经营面积</label>
+                <span class="mianji">{{
+                  toolForm.area
+                }}</span>
+                <span>M2</span>
+              </div>
+            </div>
+            <div class="tool-right">
+              <div class="tool-right-item">
+                <p>
+                  执业药师 <span>{{ toolForm.praPharmacist }}</span>
+                </p>
+                <p>
+                  执业中药师 <span>{{ toolForm.praChinesePharmacist }}</span>
+                </p>
+                <p>
+                  药师 <span>{{ toolForm.pharmacist }}</span>
+                </p>
+                <p>
+                  技工 <span>{{ toolForm.mechanic }}</span>
+                </p>
+              </div>
+            </div>
+          </div>
         </el-col>
       </el-row>
     </el-card>
@@ -98,6 +139,7 @@ import {
   sureDrugReport,
   deleteAllDrugReportMember,
   isCanSH,
+  getShopDrugCount,
 } from "@/api/declare";
 import { update, getMemberMajor, getMemberEducation } from "@/api/person";
 import MainContent from "./MainContent";
@@ -114,6 +156,22 @@ const defaultForm = {
   drugMajorId: null,
   drugEducationId: null,
   workTime: null,
+};
+
+const defaultToolForm = {
+  shopId: null,
+  subjection: null,
+  chineseMedicine: null,
+  longRange: null,
+  area: null,
+  praPharmacist: null,
+  praChinesePharmacist: null,
+  pharmacist: null,
+  mechanic: null,
+  praPharmacist: null,
+  praChinesePharmacist: null,
+  pharmacist: null,
+  mechanic: null,
 };
 export default {
   components: {
@@ -142,9 +200,66 @@ export default {
       //按钮对话框
       showBtnDialogVisible: false,
       sureStatus: false,
+      //药监信息对话框数据
+      toolForm: Object.assign({}, defaultToolForm),
+      // //控制药监计算工具对话框的显示
+      subjectionOptions: [
+        {
+          label: "市区",
+          value: "1",
+        },
+        {
+          label: "乡镇",
+          value: "2",
+        },
+        {
+          label: "村",
+          value: "3",
+        },
+      ],
+      chineseMedicineOptions: [
+        {
+          label: "无",
+          value: "0",
+        },
+        {
+          label: "有",
+          value: "1",
+        },
+      ],
+      longRangeOptions: [
+        {
+          label: "否",
+          value: "0",
+        },
+        {
+          label: "是",
+          value: "1",
+        },
+      ],
     };
   },
   methods: {
+    // 获得药监计算数据
+    getYaoJianInfo() {
+      console.log(this.$route.query.shopId);
+      getShopDrugCount(this.$route.query.shopId).then((res) => {
+        this.toolForm = res.data;
+        if (this.toolForm.subjection === 1) {
+          this.toolForm.subjection = "市区";
+        } else if (this.toolForm.subjection === 2) {
+          this.toolForm.subjection = "乡镇";
+        } else {
+          this.toolForm.subjection = "村";
+        }
+        this.toolForm.chineseMedicine === 1
+          ? (this.toolForm.chineseMedicine = "是")
+          : (this.toolForm.chineseMedicine = "否");
+        this.toolForm.longRange === 1
+          ? (this.toolForm.longRange = "是")
+          : (this.toolForm.longRange = "否");
+      });
+    },
     getHeaderInfo() {
       getDrugReport(this.$route.query.reportId).then((res) => {
         this.shopId = res.data.shopId;
@@ -295,6 +410,7 @@ export default {
     this.getHeaderInfo();
     this.getPersonList();
     this.getSureStatus();
+    this.getYaoJianInfo();
   },
 };
 </script>
@@ -305,16 +421,70 @@ export default {
 }
 
 .el-row {
-  padding: 0 20px;
+  padding: 0 10px;
   .el-col {
-    label {
-      font-size: 24px;
-      font-weight: 700;
-      margin-right: 20px;
-    }
-    span {
-      font-size: 22px;
-      color: #666;
+    .tool {
+      display: flex;
+      .tool-left {
+        padding: 5px;
+        width: 240px;
+        height: 200px;
+        margin-right: 25px;
+        background-color: #ffdf25;
+        box-shadow: 4px 4px 4px #aaa;
+        .toolFormLabel {
+          display: flex;
+          justify-content: space-between;
+          font-size: 18px;
+          font-weight: 400;
+          width: 100%;
+          line-height: 40px;
+          margin: 0 0 10px 0;
+          text-align: center;
+          label {
+            width: 80px;
+          }
+          span {
+            display: inline-block;
+            width: 100px;
+            background-color: #fff;
+          }
+        }
+        .area {
+          text-align: center;
+          line-height: 40px;
+          label,
+          span {
+            font-size: 18px;
+            font-weight: 700;
+          }
+          .mianji {
+            display: inline-block;
+            width: 80px;
+            background-color: #fff;
+          }
+        }
+      }
+
+      .tool-right {
+        width: 140px;
+        height: 80px;
+        margin: 5px;
+        .tool-right-item {
+          position: relative;
+          width: 100%;
+          padding: 5px;
+          font-size: 18px;
+          font-weight: 700;
+          margin-bottom: 10px;
+          box-shadow: 4px 4px 4px #aaa;
+          background-color: #36a9ce;
+          span {
+            position: absolute;
+            right: 5px;
+          }
+        }
+      }
     }
   }
 }

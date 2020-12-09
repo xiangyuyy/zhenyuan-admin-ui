@@ -25,15 +25,15 @@
             >
             </el-date-picker>
           </el-form-item>
-          <el-form-item label="门店">
+          <el-form-item label="门店/区域">
             <el-cascader
-              expand-trigger="hover"
-              filterable
-              clearable
               v-model="shopIdList"
               :options="shopOptions"
               :props="cascaderProps"
               :show-all-levels="false"
+              filterable
+              clearable
+              collapse-tags
               @change="handleChange"
             ></el-cascader>
           </el-form-item>
@@ -86,9 +86,9 @@
             >
               编辑明细
             </el-button>
-            <el-button type="text" v-else @click="toChange(scope.row)">
+            <!-- <el-button type="text" v-else @click="toChange(scope.row)">
               变更
-            </el-button>
+            </el-button> -->
           </template>
         </el-table-column>
         <el-table-column prop="checkStatus" label="审核状态" align="center">
@@ -146,7 +146,8 @@ export default {
         reportId: null,
         reportTimeBegin: null,
         reportTimeEnd: null,
-        shopId: null,
+        // shopId: null,
+        shopIds: [],
         operatorId: null,
         checkStatus: null,
         pageNum: 1,
@@ -156,6 +157,7 @@ export default {
       shopIdList: [],
       shopOptions: [],
       cascaderProps: {
+        multiple: true,
         label: "label",
         value: "value",
         children: "children",
@@ -177,8 +179,17 @@ export default {
       });
     },
     handleChange(val) {
+      this.queryInfo.shopIds = [];
       this.shopIdList = val;
-      this.queryInfo.shopId = String([val[Array.from(val).length - 1]]);
+      for (let i = 0; i < val.length; i++) {
+        for (let j = 0; j < val[i].length; j++) {
+          if (j === val[i].length - 1) {
+            this.queryInfo.shopIds.push(val[i][j]);
+          }
+        }
+      }
+      this.queryInfo.shopIds = Array.from([...new Set(this.queryInfo.shopIds)]);
+      console.log(this.queryInfo.shopIds);
     },
     getTableData() {
       getDrugReportList(this.queryInfo).then((res) => {
@@ -198,9 +209,10 @@ export default {
     },
     //编辑明细
     editDetail(row) {
+      console.log('row',row);
       this.$router.push({
         path: "/dsd/editDetail/",
-        query: { reportId: row.id },
+        query: { reportId: row.id, shopId: row.shopId },
       });
     },
     //变更
@@ -235,6 +247,9 @@ export default {
   margin-bottom: 40px;
   .form {
     padding-top: 15px;
+    .el-cascader{
+      width: 260px;
+    }
     .el-input,
     .el-select {
       width: 160px;

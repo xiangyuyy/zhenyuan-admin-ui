@@ -1,10 +1,10 @@
 import request from '@/utils/request'
 //获取人员列表
-export function getMemberList(params) {
+export function getMemberList(data) {
     return request({
         url: '/member/getMemberList',
-        method: 'get',
-        params: params
+        method: 'post',
+        data: data
     })
 }
 //添加/修改信息
@@ -84,6 +84,16 @@ export function getMemberEducation(id) {
         method: 'get'
     })
 }
+
+// 变更原因
+export function getAllDrugChangeReason() {
+    return request({
+        url: '/member/getAllDrugChangeReason',
+        method: 'get'
+    })
+}
+
+
 //职务或岗位
 export function getDrugPosition() {
     return request({
@@ -106,5 +116,14 @@ export function getAllDepartment() {
     return request({
         url: '/member/getAllDepartment',
         method: 'get',
+    })
+}
+
+
+export function getDrugCountList(params) {
+    return request({
+        url: '/drugReport/getDrugCountList',
+        method: 'get',
+        params:params
     })
 }

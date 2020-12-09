@@ -23,7 +23,6 @@ export function getDrugCount(data) {
     })
 }
 
-
 //确定药监数据
 export function sureDrugCount(data) {
     return request({
@@ -72,7 +71,6 @@ export function getDrugChangeReportMemberList(params) {
         params: params
     })
 }
-
 //获取修改人员信息
 export function member(id) {
     return request({
@@ -138,11 +136,11 @@ export function deleteAllDrugReportMember(reportId) {
 }
 
 //获取控制台列表
-export function getDrugReportList(params) {
+export function getDrugReportList(data) {
     return request({
         url: '/drugReport/getDrugReportList',
-        method: 'get',
-        params: params
+        method: 'post',
+        data
     })
 }
 
@@ -168,3 +166,30 @@ export function getAllOperator() {
         method: 'get'
     })
 }
+
+export function getShopDrugChangeReportMemberList(params) {
+    return request({
+        url: '/drugReport/getShopDrugChangeReportMemberList',
+        method: 'get',
+        params: params
+    })
+}
+
+
+export function getChangeReportId(sId) {
+    return request({
+        url: '/drugReport/getChangeReportId/?shopId=' + sId,
+        method: 'get',
+    })
+}
+
+export function addReportChangeMember(data) {
+    return request({
+        url: '/drugReport/addReportChangeMember',
+        method: 'post',
+        data: data
+    })
+}
+
+
+

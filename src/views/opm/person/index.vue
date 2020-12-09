@@ -4,15 +4,15 @@
     <el-card shadow="never">
       <!-- 查询区域 -->
       <el-form :inline="true" :model="queryInfo" class="demo-form-inline">
-        <el-form-item label="门店">
+        <el-form-item label="门店/区域">
           <el-cascader
-            expand-trigger="hover"
             v-model="shopIdList"
             :options="shopOptions"
             :props="cascaderProps"
             :show-all-levels="false"
-            filterable
             clearable
+            collapse-tags
+            filterable
             @change="handleChange"
           ></el-cascader>
         </el-form-item>
@@ -268,7 +268,8 @@ import {
 import { member } from "@/api/declare";
 import ShowDialog from "@/components/ShowDialog/ShowDialog";
 const defaultQueryInfo = {
-  shopId: null,
+  // shopId: null,
+  shopIds: [],
   name: null,
   drugPositionId: null,
   major: null,
@@ -298,6 +299,7 @@ export default {
       shopIdList: [],
       shopOptions: [],
       cascaderProps: {
+        multiple: true,
         label: "label",
         value: "value",
         children: "children",
@@ -315,6 +317,7 @@ export default {
       // 控制录入/修改对话框的显示
       dialogVisible: false,
       // 录入/修改表单
+
       isEdit: null,
       //药监专业
       drugMajorList: null,
@@ -343,9 +346,22 @@ export default {
         this.shopOptions = [filterTree(res.data[0])];
       });
     },
+    // handleChange(val) {
+    //   this.shopIdList = val;
+    //   this.queryInfo.shopId = String([val[Array.from(val).length - 1]]);
+    // },
     handleChange(val) {
+      this.queryInfo.shopIds = [];
       this.shopIdList = val;
-      this.queryInfo.shopId = String([val[Array.from(val).length - 1]]);
+      for (let i = 0; i < val.length; i++) {
+        for (let j = 0; j < val[i].length; j++) {
+          if (j === val[i].length - 1) {
+            this.queryInfo.shopIds.push(val[i][j]);
+          }
+        }
+      }
+      this.queryInfo.shopIds = Array.from([...new Set(this.queryInfo.shopIds)]);
+      console.log(this.queryInfo.shopIds);
     },
     //获取职称
     getTitleOptions() {
@@ -469,6 +485,9 @@ export default {
   padding: 20px;
   .el-form {
     border-bottom: 2px solid #ccc;
+    .el-cascader{
+      width: 260px;
+    }
     .el-input {
       width: 120px;
     }

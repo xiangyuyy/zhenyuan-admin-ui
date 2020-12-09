@@ -12,7 +12,7 @@
       </el-table>
     </el-card>
 
-    <el-dialog :visible.sync="dialogVisible" width="60%">
+    <el-dialog :visible.sync="dialogVisible" width="50%">
       <div>
         <el-button
           style="float: right; margin-bottom: 20px"

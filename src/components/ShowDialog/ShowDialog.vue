@@ -15,6 +15,7 @@
             <el-col :span="8">
               <el-form-item label="岗位一">
                 <el-select
+                  class="position"
                   v-model="dialogForm.drugPositionOneId"
                   filterable
                   clearable
@@ -33,6 +34,7 @@
             <el-col :span="8">
               <el-form-item label="岗位二">
                 <el-select
+                  class="position"
                   v-model="dialogForm.drugPositionTwoId"
                   filterable
                   clearable
@@ -51,6 +53,7 @@
             <el-col :span="8">
               <el-form-item label="岗位三">
                 <el-select
+                  class="position"
                   v-model="dialogForm.drugPositionThreeId"
                   filterable
                   clearable
@@ -292,6 +295,9 @@ export default {
 }
 .el-select,
 .el-date-editor {
+  &:not(.position) {
+    width: 230px;
+  }
   width: 160px;
 }
 .dialog-form {

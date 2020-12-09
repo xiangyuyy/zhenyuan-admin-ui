@@ -115,6 +115,13 @@
             <a class="daochu" @click="drive(scope.row.id)">导 出</a>
           </template>
         </el-table-column>
+        <el-table-column label="药监信息" align="center">
+          <template slot-scope="scope">
+            <el-button type="primary" @click="yaoJianInfo(scope.row)"
+              >药监信息</el-button
+            >
+          </template>
+        </el-table-column>
       </el-table>
     </div>
     <!-- 分页 -->
@@ -231,6 +238,51 @@
       >
       </el-pagination>
     </div>
+
+    <!-- 药监信息 -->
+    <el-dialog
+      title="药监信息"
+      :visible.sync="yaoJianInfodialogVisible"
+      width="30%"
+    >
+      <div class="tool">
+        <div class="tool-left">
+          <div class="toolFormLabel">
+            <label>行政隶属</label>
+            <span>{{ toolForm.subjection }}</span>
+          </div>
+          <div class="toolFormLabel">
+            <label>有无中药</label>
+            <span>{{ toolForm.chineseMedicine }}</span>
+          </div>
+          <div class="toolFormLabel">
+            <label>是否远程</label>
+            <span>{{ toolForm.longRange }}</span>
+          </div>
+          <div class="area">
+            <label>药品经营面积</label>
+            <span class="mianji">{{ toolForm.area }}</span>
+            <span>M2</span>
+          </div>
+        </div>
+        <div class="tool-right">
+          <div class="tool-right-item">
+            <p>
+              执业药师 <span>{{ toolForm.praPharmacist }}</span>
+            </p>
+            <p>
+              执业中药师 <span>{{ toolForm.praChinesePharmacist }}</span>
+            </p>
+            <p>
+              药师 <span>{{ toolForm.pharmacist }}</span>
+            </p>
+            <p>
+              技工 <span>{{ toolForm.mechanic }}</span>
+            </p>
+          </div>
+        </div>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
@@ -240,6 +292,7 @@ import {
   getDrugReportMemberList,
   getDrugChangeReportMemberList,
   getAllOperator,
+  getShopDrugCount,
 } from "@/api/declare";
 import { getAllDepartmentShop } from "@/api/person";
 const defaultSelectInfo = {
@@ -247,6 +300,22 @@ const defaultSelectInfo = {
   reportId: null,
   pageNum: 1,
   pageSize: 5,
+};
+
+const defaultToolForm = {
+  shopId: null,
+  subjection: null,
+  chineseMedicine: null,
+  longRange: null,
+  area: null,
+  praPharmacist: null,
+  praChinesePharmacist: null,
+  pharmacist: null,
+  mechanic: null,
+  praPharmacist: null,
+  praChinesePharmacist: null,
+  pharmacist: null,
+  mechanic: null,
 };
 
 export default {
@@ -265,7 +334,8 @@ export default {
         reportId: null,
         reportTimeBegin: null,
         reportTimeEnd: null,
-        shopId: null,
+        // shopId: null,
+        shopIds: null,
         operatorId: null,
         checkStatus: null,
         pageNum: 1,
@@ -284,6 +354,10 @@ export default {
       total: 0,
       total_1: 0,
       dataList: null,
+      // 控制药监信息对话框是否显示
+      yaoJianInfodialogVisible: false,
+      //药监信息对话框数据
+      toolForm: Object.assign({}, defaultToolForm),
     };
   },
   methods: {
@@ -340,6 +414,26 @@ export default {
     //导出
     drive(id) {
       console.log(id);
+    },
+    // 获取药监信息
+    yaoJianInfo(row) {
+      this.yaoJianInfodialogVisible = true;
+      getShopDrugCount(row.shopId).then((res) => {
+        this.toolForm = res.data;
+        if (this.toolForm.subjection === 1) {
+          this.toolForm.subjection = "市区";
+        } else if (this.toolForm.subjection === 2) {
+          this.toolForm.subjection = "乡镇";
+        } else {
+          this.toolForm.subjection = "村";
+        }
+        this.toolForm.chineseMedicine === 1
+          ? (this.toolForm.chineseMedicine = "是")
+          : (this.toolForm.chineseMedicine = "否");
+        this.toolForm.longRange === 1
+          ? (this.toolForm.longRange = "是")
+          : (this.toolForm.longRange = "否");
+      });
     },
     historyData(mId) {
       this.$router.push({ path: "/drq/historyQuery/", query: { mId } });
@@ -421,5 +515,69 @@ export default {
 .daochu:hover {
   color: purple;
   cursor: pointer;
+}
+.tool {
+  display: flex;
+  justify-content: center;
+  .tool-left {
+    padding: 5px;
+    width: 240px;
+    height: 200px;
+    margin-right: 25px;
+    background-color: #ffdf25;
+    box-shadow: 4px 4px 4px #aaa;
+    .toolFormLabel {
+      display: flex;
+      justify-content: space-between;
+      font-size: 18px;
+      font-weight: 400;
+      width: 100%;
+      line-height: 40px;
+      margin: 0 0 10px 0;
+      text-align: center;
+      label {
+        width: 80px;
+      }
+      span {
+        display: inline-block;
+        width: 100px;
+        background-color: #fff;
+      }
+    }
+    .area {
+      text-align: center;
+      line-height: 40px;
+      label,
+      span {
+        font-size: 18px;
+        font-weight: 700;
+      }
+      .mianji {
+        display: inline-block;
+        width: 80px;
+        background-color: #fff;
+      }
+    }
+  }
+
+  .tool-right {
+    width: 140px;
+    height: 80px;
+    margin: 5px;
+    .tool-right-item {
+      position: relative;
+      width: 100%;
+      padding: 5px;
+      font-size: 18px;
+      font-weight: 700;
+      margin-bottom: 10px;
+      box-shadow: 4px 4px 4px #aaa;
+      background-color: #36a9ce;
+      span {
+        position: absolute;
+        right: 5px;
+      }
+    }
+  }
 }
 </style>
