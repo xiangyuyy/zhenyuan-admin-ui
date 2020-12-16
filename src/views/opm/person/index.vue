@@ -81,11 +81,11 @@
             药监岗位信息录入
           </el-button>
         </el-col>
-        <el-col :span="4">
+<!--         <el-col :span="4">
           <el-upload :action="uploadURL">
             <el-button type="success" plain>药监期初EXECL导入</el-button>
           </el-upload>
-        </el-col>
+        </el-col> -->
         <el-col :span="4">
           <el-button type="primary" @click="details" plain>详情</el-button>
         </el-col>

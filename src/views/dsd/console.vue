@@ -86,9 +86,9 @@
             >
               编辑明细
             </el-button>
-            <!-- <el-button type="text" v-else @click="toChange(scope.row)">
-              变更
-            </el-button> -->
+            <el-button type="text" v-else @click="toChange(scope.row)">
+              详情
+            </el-button>
           </template>
         </el-table-column>
         <el-table-column prop="checkStatus" label="审核状态" align="center">

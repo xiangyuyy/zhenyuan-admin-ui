@@ -1,7 +1,7 @@
 <template>
   <div class="app-container">
     <el-card class="header" shadow="never">
-      <h2>门店变更录入</h2>
+      <h2>药监申报详情</h2>
       <el-row :gutter="20">
         <el-col :span="6">
           <label>单号</label>
@@ -25,7 +25,7 @@
         border
         style="width: 100%"
       >
-        <el-table-column label="功能" align="center" width="110">
+<!--         <el-table-column label="功能" align="center" width="110">
           <template slot-scope="scope">
             <el-button
               type="primary"
@@ -34,7 +34,7 @@
               >变更申请</el-button
             >
           </template>
-        </el-table-column>
+        </el-table-column> -->
         <el-table-column
           type="index"
           label="序号"

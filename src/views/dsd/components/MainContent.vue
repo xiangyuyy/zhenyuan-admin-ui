@@ -161,6 +161,13 @@
       <!-- 查询 -->
       <el-card class="headerForm" shadow="never">
         <el-form :inline="true" :model="queryInfo" class="demo-form-inline">
+          <el-form-item label="姓名">
+          <el-input
+            v-model="queryInfo.name"
+            placeholder="请输入姓名"
+            clearable
+          ></el-input>
+          </el-form-item>
           <el-form-item label="现有职称">
             <el-select
               v-model="queryInfo.titleId"
@@ -305,6 +312,7 @@ const defaultQueryInfo = {
   drugPositionId: null,
   shopId: null,
   reportId: null,
+  name: null,
   pageNum: 1,
   pageSize: 5,
 };

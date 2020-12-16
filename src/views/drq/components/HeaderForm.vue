@@ -2,14 +2,14 @@
   <div>
     <el-card shadow="never">
       <el-form :inline="true" :model="form">
-        <el-form-item label="区域">
+<!--         <el-form-item label="区域">
           <el-select v-model="form.region" placeholder="请选择">
             <el-option label="区域一" value="shanghai"></el-option>
           </el-select>
-        </el-form-item>
+        </el-form-item> -->
         <el-form-item label="门店">
           <el-select v-model="form.shopName" placeholder="请选择">
-            <el-option label="区域一" value="shanghai"></el-option>
+            <el-option label="门店" value="shanghai"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="姓名">
