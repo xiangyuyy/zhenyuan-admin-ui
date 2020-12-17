@@ -162,11 +162,11 @@
       <el-card class="headerForm" shadow="never">
         <el-form :inline="true" :model="queryInfo" class="demo-form-inline">
           <el-form-item label="姓名">
-          <el-input
-            v-model="queryInfo.name"
-            placeholder="请输入姓名"
-            clearable
-          ></el-input>
+            <el-input
+              v-model="queryInfo.name"
+              placeholder="请输入姓名"
+              clearable
+            ></el-input>
           </el-form-item>
           <el-form-item label="现有职称">
             <el-select
@@ -233,6 +233,13 @@
         >
           <el-table-column type="selection" label="全选" align="center">
           </el-table-column>
+          <el-table-column label="操作" align="center" width="160">
+            <template slot-scope="{ row }">
+              <el-button type="primary" @click="editDrugInfo(row)"
+                >编辑药监信息</el-button
+              >
+            </template>
+          </el-table-column>
           <el-table-column
             type="index"
             label="序号"
@@ -288,7 +295,7 @@
           @size-change="handleSizeChange"
           @current-change="handleCurrentChange"
           :current-page="queryInfo.pageNum"
-          :page-sizes="[1, 5, 10]"
+          :page-sizes="[1, 3, 5]"
           :page-size="queryInfo.pageSize"
           layout="total, sizes, prev, pager, next, jumper"
           :total="total"
@@ -300,12 +307,35 @@
         <el-button type="info" @click="cancel">取消</el-button>
       </span>
     </el-dialog>
+
+    <!-- 编辑药监信息 -->
+    <show-dialog
+      :is-edit="isEdit"
+      :drugMajor="drugMajorList"
+      :drugEducation="drugEducationList"
+      :form="form"
+      :showDialogVisible="yaoJiandialog"
+      @commit-form="confirmEdit"
+      @cancel="editCancel"
+    ></show-dialog>
   </div>
 </template>
 
 <script>
-import { getMemberList, addPersonal, getAllEducation } from "@/api/declare";
-import { getAllTitle, getDrugPosition } from "@/api/person";
+import {
+  getMemberList,
+  addPersonal,
+  getAllEducation,
+  member,
+} from "@/api/declare";
+import {
+  getAllTitle,
+  getDrugPosition,
+  getMemberMajor,
+  getMemberEducation,
+  update,
+} from "@/api/person";
+import ShowDialog from "@/components/ShowDialog/ShowDialog";
 const defaultQueryInfo = {
   titleId: null,
   educationId: null,
@@ -316,8 +346,24 @@ const defaultQueryInfo = {
   pageNum: 1,
   pageSize: 5,
 };
+
+const defaultForm = {
+  id: null,
+  drugPositionOneId: null,
+  drugPositionTwoId: null,
+  drugPositionThreeId: null,
+  drugTitleId: null,
+  drugOrgId: null,
+  drugShopId: null,
+  drugMajorId: null,
+  drugEducationId: null,
+  workTime: null,
+};
 export default {
   props: ["content", "sId", "rId"],
+  components: {
+    ShowDialog,
+  },
   data() {
     return {
       tableData: this.content,
@@ -340,6 +386,15 @@ export default {
         reportId: null,
       },
       total: 0,
+      // 编辑药监信息
+      isEdit: false,
+      yaoJiandialog: false,
+      //药监专业
+      drugMajorList: null,
+      // 药监学历
+      drugEducationList: null,
+      //录入/修改表单
+      form: Object.assign({}, defaultForm),
     };
   },
   watch: {
@@ -360,6 +415,7 @@ export default {
         this.queryInfo.shopId = this.shopId;
         getMemberList(this.queryInfo).then((res) => {
           this.personList = res.data.list;
+          console.log(this.personList);
           this.total = res.data.total;
         });
         this.dialogVisible = true;
@@ -479,6 +535,38 @@ export default {
         return "background:#FFFF66";
       }
       return "";
+    },
+    // 编辑药监信息
+    editDrugInfo(row) {
+      // 获取药监专业
+      getMemberMajor(row.id).then((res) => {
+        this.drugMajorList = res.data;
+      });
+      // 获取药监学历
+      getMemberEducation(row.id).then((res) => {
+        this.drugEducationList = res.data;
+      });
+      member(row.id).then((res) => {
+        this.form = res.data;
+        this.isEdit = true;
+        this.yaoJiandialog = true;
+      });
+    },
+    // 编辑药监信息确定
+    confirmEdit() {
+      console.log(this.form);
+      update(this.form).then((res) => {
+        this.$message({
+          message: "修改成功",
+          type: "success",
+        });
+        this.selectAddPerson();
+      });
+      this.yaoJiandialog = false;
+    },
+    // 编辑药监信息取消
+    editCancel() {
+      this.yaoJiandialog = false;
     },
   },
 };

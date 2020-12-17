@@ -117,6 +117,14 @@ export function isCanSH() {
         method: 'get',
     })
 }
+// 保存导出
+export function sureAndExportDrugReport(data) {
+    return request({
+        url: '/drugReport/sureAndExportDrugReport',
+        method: 'post',
+        data: data
+    })
+}
 
 //确定保存不导出
 export function sureDrugReport(data) {

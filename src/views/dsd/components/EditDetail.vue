@@ -40,9 +40,7 @@
               </div>
               <div class="area">
                 <label>药品经营面积</label>
-                <span class="mianji">{{
-                  toolForm.area
-                }}</span>
+                <span class="mianji">{{ toolForm.area }}</span>
                 <span>M2</span>
               </div>
             </div>
@@ -137,6 +135,7 @@ import {
   member,
   passDrugReport,
   sureDrugReport,
+  sureAndExportDrugReport,
   deleteAllDrugReportMember,
   isCanSH,
   getShopDrugCount,
@@ -357,18 +356,22 @@ export default {
     confirm() {
       this.showBtnDialogVisible = true;
     },
+    // 保存导出
     saveAndExport() {
       //this.showBtnDialogVisible = false;
       //this.$router.push("/dsd/console");
-      sureDrugReport({ reportId: this.queryInfo.reportId }).then((res) => {
-        this.$message({
-          message: "保存成功",
-          type: "success",
-        });
-        this.showBtnDialogVisible = false;
-        this.$router.push("/dsd/console");
-      });
+      sureAndExportDrugReport({ reportId: this.queryInfo.reportId }).then(
+        (res) => {
+          this.$message({
+            message: "保存成功",
+            type: "success",
+          });
+          this.showBtnDialogVisible = false;
+          this.$router.push("/dsd/console");
+        }
+      );
     },
+    // 保存不导出
     saveNotExport() {
       // console.log(this.queryInfo.reportId);
       sureDrugReport({ reportId: this.queryInfo.reportId }).then((res) => {
