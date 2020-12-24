@@ -199,5 +199,16 @@ export function addReportChangeMember(data) {
     })
 }
 
-
-
+// 获取按钮的状态
+export function isChangeStatus(sId) {
+    return request({
+        url: '/drugReport/isChangeStatus?shopId=' + sId,
+        method: 'get',
+    })
+}
+export function sureChanges(sId) {
+    return request({
+        url: '/drugReport/sureChanges?shopId=' + sId,
+        method: 'get',
+    })
+}

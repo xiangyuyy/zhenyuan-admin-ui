@@ -197,6 +197,11 @@
       >
       </el-pagination>
     </div>
+    <div class="tiJiao_btn">
+      <el-button type="primary" v-if="isShowChange" @click="tiJiaoChange"
+        >提交变更</el-button
+      >
+    </div>
     <!-- 修改对话框 -->
     <el-dialog
       title="人员信息变更"
@@ -414,11 +419,11 @@
       <el-card class="headerForm" shadow="never">
         <el-form :inline="true" :model="queryInfo" class="demo-form-inline">
           <el-form-item label="姓名">
-          <el-input
-            v-model="addPersonDialogQuery.name"
-            placeholder="请输入姓名"
-            clearable
-          ></el-input>
+            <el-input
+              v-model="addPersonDialogQuery.name"
+              placeholder="请输入姓名"
+              clearable
+            ></el-input>
           </el-form-item>
           <el-form-item label="现有职称">
             <el-select
@@ -568,6 +573,8 @@ import {
   getAllEducation,
   addReportChangeMember,
   addPersonal,
+  isChangeStatus,
+  sureChanges,
 } from "@/api/declare";
 import {
   getDrugPosition,
@@ -593,7 +600,7 @@ const defaultToolForm = {
   praPharmacist: null,
   praChinesePharmacist: null,
   pharmacist: null,
-  mechanic: null
+  mechanic: null,
 };
 
 export default {
@@ -671,6 +678,8 @@ export default {
         shopId: null,
         reportId: null,
       },
+      // 控制提交变更按钮是否显示
+      isShowChange: false,
     };
   },
   methods: {
@@ -681,13 +690,13 @@ export default {
       });
     },
     handleChange(val) {
-      if(val.length===0) return;
-      this.toolForm=Object.assign({}, defaultToolForm),
+      if (val.length === 0) return;
+      this.toolForm = Object.assign({}, defaultToolForm);
       this.queryInfo.shopId = String([val[Array.from(val).length - 1]]);
       this.addPersonDialogQuery.shopId = this.queryInfo.shopId;
       this.addReportMemberDto.shopId = this.queryInfo.shopId;
       getShopDrugCount(this.queryInfo.shopId).then((res) => {
-        if(res.data===null) return;
+        if (res.data === null) return;
         this.toolForm = res.data;
         if (this.toolForm.subjection === 1) {
           this.toolForm.subjection = "市区";
@@ -707,7 +716,6 @@ export default {
     // 新增人员
     addNewPerson() {
       getChangeReportId(this.queryInfo.shopId).then((res) => {
-        console.log(res);
         this.reportId = res.data;
         this.addPersonDialogQuery.reportId = res.data;
         this.addReportMemberDto.reportId = res.data;
@@ -749,6 +757,9 @@ export default {
     queryMsg() {
       this.queryInfo.pageNum = 1;
       this.getUserList();
+      isChangeStatus(this.queryInfo.shopId).then((res) => {
+        this.isShowChange = res.data;
+      });
     },
     // 获得表格数据
     getUserList() {
@@ -819,11 +830,12 @@ export default {
       updateMemberRecord(this.dialogForm).then((res) => {
         this.getUserList();
         this.dialogVisible = false;
-        this.$message({
-          message: "变更信息成功",
-          type: "success",
-        });
-        this.$router.push("/dsd/console");
+        this.isShowChange = true;
+        // this.$message({
+        //   message: "变更信息成功",
+        //   type: "success",
+        // });
+        // this.$router.push("/dsd/console");
       });
     },
     handleSizeChange(newSize) {
@@ -867,6 +879,7 @@ export default {
       if (this.addReportMemberDto.memberIds.length) {
         addReportChangeMember(this.addReportMemberDto).then((res) => {
           this.getUserList();
+          this.isShowChange=true;
           this.showAddPersonDialog = false;
           this.addPersonDialogQuery.titleId = null;
           this.addPersonDialogQuery.educationId = null;
@@ -893,6 +906,15 @@ export default {
         return "background:#FFFF66";
       }
       return "";
+    },
+    //  提交变更
+    tiJiaoChange() {
+      sureChanges(this.queryInfo.shopId).then((res) => {
+        console.log(res);
+        if (res.code === 200) {
+          this.$router.push("/dsd/console");
+        }
+      });
     },
     cellDialogStyle(data) {
       if (data.columnIndex === 2) {
@@ -1023,6 +1045,10 @@ export default {
       }
     }
   }
+}
+.tiJiao_btn {
+  width: 60px;
+  margin: 60px auto;
 }
 .table-container {
   margin-top: 40px;
