@@ -25,7 +25,7 @@
         border
         style="width: 100%"
       >
-<!--         <el-table-column label="功能" align="center" width="110">
+        <!--         <el-table-column label="功能" align="center" width="110">
           <template slot-scope="scope">
             <el-button
               type="primary"
@@ -162,6 +162,8 @@
                 <el-select
                   class="position"
                   v-model="dialogForm.drugPositionOneId"
+                  filterable
+                  clearable
                   placeholder="请选择"
                 >
                   <el-option
@@ -179,6 +181,8 @@
                 <el-select
                   class="position"
                   v-model="dialogForm.drugPositionTwoId"
+                  filterable
+                  clearable
                   placeholder="请选择"
                 >
                   <el-option
@@ -196,6 +200,8 @@
                 <el-select
                   class="position"
                   v-model="dialogForm.drugPositionThreeId"
+                  filterable
+                  clearable
                   placeholder="请选择"
                 >
                   <el-option
@@ -215,6 +221,8 @@
               <el-form-item label="药监上报职称">
                 <el-select
                   v-model="dialogForm.drugTitleId"
+                  filterable
+                  clearable
                   placeholder="请选择"
                 >
                   <el-option
@@ -229,7 +237,12 @@
             </el-col>
             <el-col :span="12">
               <el-form-item label="药监编制职称">
-                <el-select v-model="dialogForm.drugOrgId" placeholder="请选择">
+                <el-select
+                  v-model="dialogForm.drugOrgId"
+                  filterable
+                  clearable
+                  placeholder="请选择"
+                >
                   <el-option
                     v-for="item in drugOrgOptions"
                     :key="item.value"
@@ -244,7 +257,12 @@
           <el-row :gutter="20" class="limitRow">
             <el-col :span="12">
               <el-form-item label="药监门店">
-                <el-select v-model="dialogForm.drugShopId" placeholder="请选择">
+                <el-select
+                  v-model="dialogForm.drugShopId"
+                  filterable
+                  clearable
+                  placeholder="请选择"
+                >
                   <el-option
                     v-for="item in drugShopOptions"
                     :key="item.value"
@@ -259,6 +277,8 @@
               <el-form-item label="药监专业">
                 <el-select
                   v-model="dialogForm.drugMajorId"
+                  filterable
+                  clearable
                   placeholder="请选择"
                 >
                   <el-option
@@ -277,6 +297,8 @@
               <el-form-item label="药监学历">
                 <el-select
                   v-model="dialogForm.drugEducationId"
+                  filterable
+                  clearable
                   placeholder="请选择"
                 >
                   <el-option
@@ -294,6 +316,7 @@
                 <el-date-picker
                   v-model="dialogForm.workTime"
                   type="date"
+                  clearable
                   placeholder="选择日期"
                 >
                 </el-date-picker>

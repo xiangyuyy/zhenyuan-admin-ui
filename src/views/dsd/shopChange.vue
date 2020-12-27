@@ -217,6 +217,8 @@
                 <el-select
                   class="position"
                   v-model="dialogForm.drugPositionOneId"
+                  filterable
+                  clearable
                   placeholder="请选择"
                 >
                   <el-option
@@ -234,6 +236,8 @@
                 <el-select
                   class="position"
                   v-model="dialogForm.drugPositionTwoId"
+                  filterable
+                  clearable
                   placeholder="请选择"
                 >
                   <el-option
@@ -251,6 +255,8 @@
                 <el-select
                   class="position"
                   v-model="dialogForm.drugPositionThreeId"
+                  filterable
+                  clearable
                   placeholder="请选择"
                 >
                   <el-option
@@ -270,6 +276,8 @@
               <el-form-item label="药监上报职称">
                 <el-select
                   v-model="dialogForm.drugTitleId"
+                  filterable
+                  clearable
                   placeholder="请选择"
                 >
                   <el-option
@@ -284,7 +292,12 @@
             </el-col>
             <el-col :span="12">
               <el-form-item label="药监编制职称">
-                <el-select v-model="dialogForm.drugOrgId" placeholder="请选择">
+                <el-select
+                  v-model="dialogForm.drugOrgId"
+                  filterable
+                  clearable
+                  placeholder="请选择"
+                >
                   <el-option
                     v-for="item in drugOrgOptions"
                     :key="item.value"
@@ -299,7 +312,12 @@
           <el-row :gutter="20" class="limitRow">
             <el-col :span="12">
               <el-form-item label="药监门店">
-                <el-select v-model="dialogForm.drugShopId" placeholder="请选择">
+                <el-select
+                  v-model="dialogForm.drugShopId"
+                  filterable
+                  clearable
+                  placeholder="请选择"
+                >
                   <el-option
                     v-for="item in drugShopOptions"
                     :key="item.value"
@@ -314,6 +332,8 @@
               <el-form-item label="药监专业">
                 <el-select
                   v-model="dialogForm.drugMajorId"
+                  filterable
+                  clearable
                   placeholder="请选择"
                 >
                   <el-option
@@ -332,6 +352,8 @@
               <el-form-item label="药监学历">
                 <el-select
                   v-model="dialogForm.drugEducationId"
+                  filterable
+                  clearable
                   placeholder="请选择"
                 >
                   <el-option
@@ -349,6 +371,7 @@
                 <el-date-picker
                   v-model="dialogForm.workTime"
                   type="date"
+                  clearable
                   placeholder="选择日期"
                 >
                 </el-date-picker>
@@ -360,6 +383,8 @@
               <el-form-item label="变更原因">
                 <el-select
                   v-model="dialogForm.changeReason"
+                  filterable
+                  clearable
                   placeholder="请选择变更原因"
                 >
                   <el-option
@@ -879,7 +904,7 @@ export default {
       if (this.addReportMemberDto.memberIds.length) {
         addReportChangeMember(this.addReportMemberDto).then((res) => {
           this.getUserList();
-          this.isShowChange=true;
+          this.isShowChange = true;
           this.showAddPersonDialog = false;
           this.addPersonDialogQuery.titleId = null;
           this.addPersonDialogQuery.educationId = null;
