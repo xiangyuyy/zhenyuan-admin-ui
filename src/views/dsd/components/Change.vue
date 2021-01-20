@@ -36,9 +36,9 @@
           </template>
         </el-table-column> -->
         <el-table-column
-          type="index"
-          label="序号"
-          width="60"
+          prop="sort"
+          label="排列序号"
+          width="120"
           align="center"
         ></el-table-column>
         <el-table-column prop="name" label="姓名" align="center">

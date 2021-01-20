@@ -16,7 +16,7 @@
       border
       style="width: 100%"
     >
-      <el-table-column label="功能" align="center" width="160">
+      <el-table-column label="功能" align="center" width="180">
         <template slot-scope="scope">
           <el-button
             size="mini"
@@ -30,12 +30,18 @@
             @click="$emit('delete-person', scope.row)"
             >删除</el-button
           >
+             <el-button
+            size="mini"
+            type="danger"
+            @click="$emit('update-sort', scope.row)"
+            >修改排列序号</el-button
+          >
         </template>
       </el-table-column>
       <el-table-column
-        type="index"
-        label="序号"
-        width="60"
+        prop="sort"
+        label="排列序号"
+        width="120"
         align="center"
       ></el-table-column>
       <el-table-column
