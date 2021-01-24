@@ -101,18 +101,19 @@
         </el-table-column>
         <el-table-column prop="id" label="单号" align="center">
         </el-table-column>
-        <el-table-column prop="shopName" label="门店" align="center">
+        <el-table-column prop="shopName" label="门店" width="140" align="center">
         </el-table-column>
-        <el-table-column label="申报建立日期" width="220" align="center">
+        <el-table-column label="申报建立日期" width="141" align="center">
           <template slot-scope="scope"
             >{{ scope.row.reportTime | formatDateTime }}
           </template>
         </el-table-column>
         <el-table-column prop="operatorName" label="操作员" align="center">
         </el-table-column>
-        <el-table-column label="EXCEL导出" align="center">
-          <template slot-scope="scope">
-            <a class="daochu" @click="drive(scope.row.id)">导 出</a>
+        <el-table-column label="EXCEL导出" align="center" width="300">
+          <template slot-scope="{row}">
+            <a class="daochu" @click="drive_1(row)"> 普通导出</a>
+            <a class="daochu" @click="drive_2(row)">含药监学校导出</a>
           </template>
         </el-table-column>
       </el-table>
@@ -135,7 +136,12 @@
 
 <script>
 import { getAllDepartmentShop, filterTree } from "@/api/person";
-import { getDrugReportList, getAllOperator } from "@/api/declare";
+import {
+  getDrugReportList,
+  getAllOperator,
+  exportDrugReport,
+  exportSpecialDrugReport,
+} from "@/api/declare";
 
 export default {
   data() {
@@ -209,7 +215,7 @@ export default {
     },
     //编辑明细
     editDetail(row) {
-      console.log('row',row);
+      console.log("row", row);
       this.$router.push({
         path: "/dsd/editDetail/",
         query: { reportId: row.id, shopId: row.shopId },
@@ -219,9 +225,52 @@ export default {
     toChange(row) {
       this.$router.push({ path: "/dsd/change/", query: { data: row } });
     },
-    //导出
-    drive(id) {
-      console.log(id);
+    // 普通导出
+    drive_1(row) {
+      exportDrugReport(row.id).then((res) => {
+        const blob = new Blob([res], {
+          type:
+            "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=utf-8",
+        });
+        var time = new Date();
+        time =
+          time.getFullYear() +
+          "-" +
+          (time.getMonth() + 1) +
+          "-" +
+          time.getDate();
+        const downloadElement = document.createElement("a");
+        const href = window.URL.createObjectURL(blob);
+        downloadElement.href = href;
+        downloadElement.download = time + "普通导出.xlsx";
+        document.body.appendChild(downloadElement);
+        downloadElement.click();
+        document.body.removeChild(downloadElement); // 下载完成移除元素
+        window.URL.revokeObjectURL(href); // 释放掉blob对象
+      });
+    },
+    drive_2(row) {
+      exportSpecialDrugReport(row.id).then((res) => {
+        const blob = new Blob([res], {
+          type:
+            "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=utf-8",
+        });
+        var time = new Date();
+        time =
+          time.getFullYear() +
+          "-" +
+          (time.getMonth() + 1) +
+          "-" +
+          time.getDate();
+        const downloadElement = document.createElement("a");
+        const href = window.URL.createObjectURL(blob);
+        downloadElement.href = href;
+        downloadElement.download = time + "含药监学校导出.xlsx";
+        document.body.appendChild(downloadElement);
+        downloadElement.click();
+        document.body.removeChild(downloadElement); // 下载完成移除元素
+        window.URL.revokeObjectURL(href); // 释放掉blob对象
+      });
     },
     handleSizeChange(newSize) {
       this.queryInfo.pageNum = 1;
@@ -247,7 +296,7 @@ export default {
   margin-bottom: 40px;
   .form {
     padding-top: 15px;
-    .el-cascader{
+    .el-cascader {
       width: 260px;
     }
     .el-input,
@@ -282,6 +331,9 @@ export default {
 }
 .daochu {
   color: blue;
+  &:nth-child(1){
+    margin-right: 20px;
+  }
 }
 .daochu:hover {
   color: purple;

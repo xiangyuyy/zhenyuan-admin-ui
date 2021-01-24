@@ -1,12 +1,11 @@
 <template>
   <div class="app-container">
     <h2>报表查询-实际与编制相同人员</h2>
-    <header-form :query-form="queryForm" @query-info="query"></header-form>
-    <el-row>
-      <el-col :span="4">
-        <el-button type="primary">导出</el-button>
-      </el-col>
-    </el-row>
+    <header-form
+      :query-form="queryForm"
+      @query-info="query"
+      @export-excel="exportExcel"
+    ></header-form>
 
     <div class="tableContainer">
       <el-table
@@ -47,12 +46,9 @@
 
 <script>
 import HeaderForm from "./components/HeaderForm";
+import { getbzxtMemberList, exportbzxtMemberList } from "@/api/dataReport";
 const defaultForm = {
-  region: null,
   shopName: null,
-  name: null,
-  reportTimeBegin: null,
-  reportTimeEnd: null,
   pagrNum: 1,
   pageSize: 5,
 };
@@ -68,9 +64,39 @@ export default {
     };
   },
   methods: {
+    getTableData() {
+      getbzxtMemberList(this.queryForm).then((res) => {
+        if (res.code === 200) {
+          this.tableData = res.data.list;
+        }
+      });
+    },
+    exportExcel() {
+      exportbzxtMemberList(this.queryForm.shopId).then((res) => {
+        const blob = new Blob([res], {
+          type:
+            "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=utf-8",
+        });
+        var time = new Date();
+        time =
+          time.getFullYear() +
+          "-" +
+          (time.getMonth() + 1) +
+          "-" +
+          time.getDate();
+        const downloadElement = document.createElement("a");
+        const href = window.URL.createObjectURL(blob);
+        downloadElement.href = href;
+        downloadElement.download = time + "实际与编制相同人员.xlsx";
+        document.body.appendChild(downloadElement);
+        downloadElement.click();
+        document.body.removeChild(downloadElement); // 下载完成移除元素
+        window.URL.revokeObjectURL(href); // 释放掉blob对象
+      });
+    },
     query() {
       this.queryForm.pagrNum = 1;
-      console.log(1);
+      this.getTableData();
     },
     handleSizeChange(newSize) {
       this.queryForm.pagrNum = 1;

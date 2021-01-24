@@ -99,20 +99,22 @@
           width="60"
           align="center"
         ></el-table-column>
-        <el-table-column prop="id" label="单号" align="center">
+        <el-table-column prop="id" label="单号" width="120" align="center">
         </el-table-column>
-        <el-table-column prop="shopName" label="门店" align="center">
+        <el-table-column prop="shopName" label="门店" width="140" align="center">
         </el-table-column>
-        <el-table-column label="申报建立日期" width="220" align="center">
+        <el-table-column label="申报建立日期" width="140" align="center">
           <template slot-scope="scope"
             >{{ scope.row.reportTime | formatDateTime }}
           </template>
         </el-table-column>
-        <el-table-column prop="operatorName" label="操作员" align="center">
+        <el-table-column prop="operatorName" label="操作员" align="center" >
         </el-table-column>
-        <el-table-column label="EXCEL导出" align="center">
-          <template slot-scope="scope">
-            <a class="daochu" @click="drive(scope.row.id)">导 出</a>
+        <el-table-column label="EXCEL导出" align="center" width="300">
+          <template slot-scope="{row}">
+            <a class="daochu" @click="drive_1(row)">普通导出</a>
+            <a class="daochu" @click="drive_2(row)">含药监学校导出</a>
+
           </template>
         </el-table-column>
         <el-table-column label="药监信息" align="center">
@@ -177,6 +179,12 @@
           prop="age"
           label="年龄"
           align="center"
+        ></el-table-column>
+        <el-table-column
+          prop="drugSchool"
+          label="药监学校"
+          align="center"
+          width="140"
         ></el-table-column>
         <el-table-column
           prop="title"
@@ -293,6 +301,8 @@ import {
   getDrugChangeReportMemberList,
   getAllOperator,
   getShopDrugCount,
+  exportDrugReport,
+  exportSpecialDrugReport
 } from "@/api/declare";
 import { getAllDepartmentShop } from "@/api/person";
 const defaultSelectInfo = {
@@ -411,9 +421,52 @@ export default {
       this.selectInfo.pageNum = 1;
       this.getUserList();
     },
-    //导出
-    drive(id) {
-      console.log(id);
+    // 普通导出
+    drive_1(row) {
+      exportDrugReport(row.id).then((res) => {
+        const blob = new Blob([res], {
+          type:
+            "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=utf-8",
+        });
+        var time = new Date();
+        time =
+          time.getFullYear() +
+          "-" +
+          (time.getMonth() + 1) +
+          "-" +
+          time.getDate();
+        const downloadElement = document.createElement("a");
+        const href = window.URL.createObjectURL(blob);
+        downloadElement.href = href;
+        downloadElement.download = time + "普通导出.xlsx";
+        document.body.appendChild(downloadElement);
+        downloadElement.click();
+        document.body.removeChild(downloadElement); // 下载完成移除元素
+        window.URL.revokeObjectURL(href); // 释放掉blob对象
+      });
+    },
+    drive_2(row) {
+      exportSpecialDrugReport(row.id).then((res) => {
+        const blob = new Blob([res], {
+          type:
+            "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=utf-8",
+        });
+        var time = new Date();
+        time =
+          time.getFullYear() +
+          "-" +
+          (time.getMonth() + 1) +
+          "-" +
+          time.getDate();
+        const downloadElement = document.createElement("a");
+        const href = window.URL.createObjectURL(blob);
+        downloadElement.href = href;
+        downloadElement.download = time + "含药监学校导出.xlsx";
+        document.body.appendChild(downloadElement);
+        downloadElement.click();
+        document.body.removeChild(downloadElement); // 下载完成移除元素
+        window.URL.revokeObjectURL(href); // 释放掉blob对象
+      });
     },
     // 获取药监信息
     yaoJianInfo(row) {
@@ -511,6 +564,9 @@ export default {
 }
 .daochu {
   color: blue;
+  &:nth-child(1){
+    margin-right: 20px;
+  }
 }
 .daochu:hover {
   color: purple;

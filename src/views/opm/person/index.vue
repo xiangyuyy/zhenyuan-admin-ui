@@ -25,7 +25,8 @@
         </el-form-item>
         <el-form-item label="职称">
           <el-select
-            v-model="queryInfo.titleId"
+            v-model="queryInfo.titleIds"
+            multiple
             filterable
             clearable
             placeholder="请选择"
@@ -48,6 +49,54 @@
           >
             <el-option
               v-for="item in majorOptions"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            >
+            </el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="学历">
+          <el-select
+            v-model="queryInfo.educationId"
+            filterable
+            clearable
+            placeholder="请选择"
+          >
+            <el-option
+              v-for="item in educationOptions"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            >
+            </el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="药监门店是否为空">
+          <el-select
+            v-model="queryInfo.isNullDrugShopId"
+            filterable
+            clearable
+            placeholder="请选择"
+          >
+            <el-option
+              v-for="item in drugShopOptions"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            >
+            </el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="人员类别">
+          <el-select
+            v-model="queryInfo.peopleKindId"
+            filterable
+            clearable
+            placeholder="请选择"
+          >
+            <el-option
+              v-for="item in peopleKindOptions"
               :key="item.value"
               :label="item.label"
               :value="item.value"
@@ -81,7 +130,7 @@
             药监岗位信息录入
           </el-button>
         </el-col>
-<!--         <el-col :span="4">
+        <!--         <el-col :span="4">
           <el-upload :action="uploadURL">
             <el-button type="success" plain>药监期初EXECL导入</el-button>
           </el-upload>
@@ -191,6 +240,12 @@
           width="120"
           align="center"
         ></el-table-column>
+         <el-table-column
+          prop="peopleKind"
+          label="人员类别"
+          width="120"
+          align="center"
+        ></el-table-column>
         <el-table-column
           prop="drugPositionAll"
           label="职务或岗位"
@@ -264,16 +319,20 @@ import {
   getDrugPosition,
   getMemberMajor,
   getMemberEducation,
+  getPeopleKindSelect
 } from "@/api/person";
-import { member } from "@/api/declare";
+import { member, getAllEducation } from "@/api/declare";
 import ShowDialog from "@/components/ShowDialog/ShowDialog";
 const defaultQueryInfo = {
   // shopId: null,
   shopIds: [],
   name: null,
   drugPositionId: null,
+  isNullDrugShopId: null,
+  peopleKindId:null,
   major: null,
-  titleId: null,
+  educationId: null,
+  titleIds: null,
   pageNum: 1,
   pageSize: 5,
 };
@@ -308,6 +367,13 @@ export default {
       majorOptions: null,
       //岗位或职务
       drugPositionOptions: null,
+      peopleKindOptions:null,
+      drugShopOptions: [
+        { label: '空', value: 0 },
+        { label: '非空', value: 1},
+      ],
+      // 学历
+      educationOptions: null,
       //文件上传地址
       uploadURL: "",
       //查询信息
@@ -346,6 +412,12 @@ export default {
         this.shopOptions = [filterTree(res.data[0])];
       });
     },
+    //获取学历
+    getEducationList() {
+      getAllEducation().then((res) => {
+        this.educationOptions = res.data;
+      });
+    },
     // handleChange(val) {
     //   this.shopIdList = val;
     //   this.queryInfo.shopId = String([val[Array.from(val).length - 1]]);
@@ -369,6 +441,14 @@ export default {
         this.titleOptions = res.data;
       });
     },
+  // 获取人员类别
+  getPersonKind(){
+    getPeopleKindSelect().then(res=>{
+      if(res.code===200){
+        this.peopleKindOptions=res.data
+      }
+    })
+  },
     getMajorOptions() {
       getMajorSelect().then((res) => {
         this.majorOptions = res.data;
@@ -473,6 +553,8 @@ export default {
   created() {
     this.getUserList();
     this.getShopOptions();
+    this.getEducationList();
+    this.getPersonKind();
     this.getTitleOptions();
     this.getMajorOptions();
     this.getDrugPositionOptions();
@@ -485,7 +567,7 @@ export default {
   padding: 20px;
   .el-form {
     border-bottom: 2px solid #ccc;
-    .el-cascader{
+    .el-cascader {
       width: 260px;
     }
     .el-input {

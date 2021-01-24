@@ -92,7 +92,13 @@ export function getAllDrugChangeReason() {
         method: 'get'
     })
 }
-
+// 人员类别
+export function getPeopleKindSelect() {
+    return request({
+        url: '/member/getPeopleKindSelect',
+        method: 'get'
+    })
+}
 
 //职务或岗位
 export function getDrugPosition() {
@@ -124,6 +130,6 @@ export function getDrugCountList(params) {
     return request({
         url: '/drugReport/getDrugCountList',
         method: 'get',
-        params:params
+        params: params
     })
 }

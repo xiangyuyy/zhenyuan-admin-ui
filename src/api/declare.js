@@ -32,11 +32,11 @@ export function sureDrugCount(data) {
     })
 }
 //药监人员新增列表
-export function getMemberList(params) {
+export function getMemberList(data) {
     return request({
         url: '/drugReport/getMemberList',
-        method: 'get',
-        params: params
+        method: 'post',
+        data: data
     })
 }
 //添加人员
@@ -210,5 +210,31 @@ export function sureChanges(sId) {
     return request({
         url: '/drugReport/sureChanges?shopId=' + sId,
         method: 'get',
+    })
+}
+
+
+// 修改sort
+export function changeDrugReportMemberSort(id, sort) {
+    return request({
+        url: '/drugReport/changeDrugReportMemberSort?id=' + id + '&sort=' + sort,
+        method: 'get',
+    })
+}
+
+// 普通导出
+export function exportDrugReport(id) {
+    return request({
+        url: '/drugReport/exportDrugReport?reportId=' + id,
+        method: 'get',
+        responseType: 'blob'
+    })
+}
+// 含药监学校导出
+export function exportSpecialDrugReport(id) {
+    return request({
+        url: '/drugReport/exportSpecialDrugReport?reportId=' + id,
+        method: 'get',
+        responseType: 'blob'
     })
 }

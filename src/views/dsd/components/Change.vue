@@ -324,14 +324,8 @@
             </el-col>
           </el-row>
           <el-row :gutter="20" class="limitRow">
-            <el-col>
+            <el-col span="12">
               <el-form-item label="变更原因">
-                <!-- <el-input
-                  type="textarea"
-                  autosize
-                  placeholder="请输入变更原因"
-                  v-model="dialogForm.changeReason"
-                ></el-input> -->
                 <el-select
                   v-model="dialogForm.changeReason"
                   placeholder="请选择变更原因"
@@ -344,6 +338,17 @@
                   >
                   </el-option>
                 </el-select>
+              </el-form-item>
+            </el-col>
+            <el-col :span="12">
+              <el-form-item label="变更时间">
+                <el-date-picker
+                  v-model="dialogForm.createTime"
+                  type="date"
+                  clearable
+                  placeholder="选择日期"
+                >
+                </el-date-picker>
               </el-form-item>
             </el-col>
           </el-row>
@@ -412,6 +417,7 @@ export default {
         drugMajorId: null,
         drugEducationId: null,
         workTime: null,
+        createTime: null,
         changeReason: null,
         changeReasonOptions: null,
       },

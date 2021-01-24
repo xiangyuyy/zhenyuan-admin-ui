@@ -1,13 +1,11 @@
 <template>
   <div class="app-container">
     <h2>报表查询-本店虚挂人员</h2>
-    <header-form :query-form="queryForm" @query-info="query"></header-form>
-    <el-row>
-      <el-col :span="4">
-        <el-button type="primary">导出</el-button>
-      </el-col>
-    </el-row>
-
+    <header-form
+      :query-form="queryForm"
+      @query-info="query"
+      @export-excel="exportExcel"
+    ></header-form>
     <div class="tableContainer">
       <el-table
         :data="tableData"
@@ -17,11 +15,11 @@
       >
         <el-table-column type="index" label="序号" width="80" align="center">
         </el-table-column>
-        <el-table-column prop="shopName" label="门店名称" align="center">
+        <el-table-column prop="drugShopName" label="药监门店" align="center">
         </el-table-column>
-        <el-table-column prop="drugShopName" label="虚挂人姓名" align="center">
+        <el-table-column prop="name" label="虚挂人姓名" align="center">
         </el-table-column>
-        <el-table-column prop="name" label="虚挂人员实际门店" align="center">
+        <el-table-column prop="shopName" label="门店" align="center">
         </el-table-column>
         <el-table-column prop="idCard" label="身份证号码" align="center">
         </el-table-column>
@@ -47,12 +45,9 @@
 
 <script>
 import HeaderForm from "./components/HeaderForm";
+import { getbdxgMemberList, exportbdxgMemberList } from "@/api/dataReport";
 const defaultForm = {
-  region: null,
-  shopName: null,
-  name: null,
-  reportTimeBegin: null,
-  reportTimeEnd: null,
+  shopId: null,
   pagrNum: 1,
   pageSize: 5,
 };
@@ -68,9 +63,39 @@ export default {
     };
   },
   methods: {
+    getTableData() {
+      getbdxgMemberList(this.queryForm).then((res) => {
+        if (res.code === 200) {
+          this.tableData = res.data.list;
+        }
+      });
+    },
+    exportExcel() {
+      exportbdxgMemberList(this.queryForm.shopId).then((res) => {
+        const blob = new Blob([res], {
+          type:
+            "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=utf-8",
+        });
+        var time = new Date();
+        time =
+          time.getFullYear() +
+          "-" +
+          (time.getMonth() + 1) +
+          "-" +
+          time.getDate();
+        const downloadElement = document.createElement("a");
+        const href = window.URL.createObjectURL(blob);
+        downloadElement.href = href;
+        downloadElement.download = time + "本店虚挂人员.xlsx";
+        document.body.appendChild(downloadElement);
+        downloadElement.click();
+        document.body.removeChild(downloadElement); // 下载完成移除元素
+        window.URL.revokeObjectURL(href); // 释放掉blob对象
+      });
+    },
     query() {
       this.queryForm.pagrNum = 1;
-      console.log(1);
+      this.getTableData();
     },
     handleSizeChange(newSize) {
       this.queryForm.pagrNum = 1;

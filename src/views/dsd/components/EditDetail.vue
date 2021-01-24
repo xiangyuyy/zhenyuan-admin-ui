@@ -73,6 +73,7 @@
         @certainInfo="updateList"
         @edit-person="editPerson"
         @delete-person="deletePerson"
+        @update-sort="updateSort"
       ></main-content>
     </div>
     <!-- 分页区域 -->
@@ -123,6 +124,17 @@
       @commit-form="editForm"
       @cancel="cancel"
     ></show-dialog>
+    <!-- 修改sort -->
+    <el-dialog title="提示" :visible.sync="sortDialogVisible" width="30%">
+      <div>
+        <el-input v-model="sortVal" placeholder="正序排序"></el-input>
+        <p>正序排序</p>
+      </div>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="sortDialogVisible = false">取 消</el-button>
+        <el-button type="primary" @click="editSort">确 定</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 
@@ -139,6 +151,7 @@ import {
   deleteAllDrugReportMember,
   isCanSH,
   getShopDrugCount,
+  changeDrugReportMemberSort,
 } from "@/api/declare";
 import { update, getMemberMajor, getMemberEducation } from "@/api/person";
 import MainContent from "./MainContent";
@@ -179,6 +192,9 @@ export default {
   },
   data() {
     return {
+      sortDialogVisible: false,
+      sortVal: "",
+      sortId: "",
       headerInfo: [],
       queryInfo: {
         reportId: null,
@@ -334,6 +350,22 @@ export default {
             message: "已取消删除",
           });
         });
+    },
+    updateSort(row) {
+      this.sortDialogVisible = true;
+      this.sortVal = row.sort;
+      this.sortId = row.id;
+    },
+    editSort() {
+      changeDrugReportMemberSort(this.sortId, this.sortVal).then((res) => {
+        if (res.code === 200) {
+          this.$message.success("修改成功!");
+          this.sortDialogVisible = false;
+          this.getPersonList();
+        } else {
+          this.$message.error("修改失败!");
+        }
+      });
     },
     handleSizeChange(newSize) {
       this.queryInfo.pageNum = 1;

@@ -16,7 +16,7 @@
       border
       style="width: 100%"
     >
-      <el-table-column label="功能" align="center" width="180">
+      <el-table-column label="功能" align="center" width="280">
         <template slot-scope="scope">
           <el-button
             size="mini"
@@ -30,7 +30,7 @@
             @click="$emit('delete-person', scope.row)"
             >删除</el-button
           >
-             <el-button
+          <el-button
             size="mini"
             type="danger"
             @click="$emit('update-sort', scope.row)"
@@ -174,9 +174,10 @@
               clearable
             ></el-input>
           </el-form-item>
-          <el-form-item label="现有职称">
+          <el-form-item label="职称">
             <el-select
-              v-model="queryInfo.titleId"
+              v-model="queryInfo.titleIds"
+              multiple
               filterable
               clearable
               placeholder="请选择"
@@ -199,6 +200,54 @@
             >
               <el-option
                 v-for="item in educationOptions"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
+              >
+              </el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item label="专业">
+            <el-select
+              v-model="queryInfo.major"
+              filterable
+              clearable
+              placeholder="请选择"
+            >
+              <el-option
+                v-for="item in majorOptions"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
+              >
+              </el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item label="药监门店是否为空">
+            <el-select
+              v-model="queryInfo.isNullDrugShopId"
+              filterable
+              clearable
+              placeholder="请选择"
+            >
+              <el-option
+                v-for="item in drugShopOptions"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
+              >
+              </el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item label="人员类别">
+            <el-select
+              v-model="queryInfo.peopleKindId"
+              filterable
+              clearable
+              placeholder="请选择"
+            >
+              <el-option
+                v-for="item in peopleKindOptions"
                 :key="item.value"
                 :label="item.label"
                 :value="item.value"
@@ -287,6 +336,12 @@
             width="150"
             align="center"
           ></el-table-column>
+           <el-table-column
+            prop="peopleKind"
+            label="人员类别"
+            width="150"
+            align="center"
+          ></el-table-column>
           <el-table-column
             prop="drugShopName"
             label="虚拟挂职药店"
@@ -340,12 +395,16 @@ import {
   getMemberMajor,
   getMemberEducation,
   update,
+  getMajorSelect,
+  getPeopleKindSelect,
 } from "@/api/person";
 import ShowDialog from "@/components/ShowDialog/ShowDialog";
 const defaultQueryInfo = {
-  titleId: null,
+  titleIds: null,
   educationId: null,
-  drugPositionId: null,
+  isNullDrugShopId: null,
+  peopleKindId: null,
+  major: null,
   shopId: null,
   reportId: null,
   name: null,
@@ -379,7 +438,13 @@ export default {
       //获取职称 学历 职务
       titleOptions: null,
       educationOptions: null,
+      majorOptions: null,
       drugPositionOptions: null,
+      peopleKindOptions: null,
+      drugShopOptions: [
+        { label: "空", value: 0 },
+        { label: "非空", value: 1 },
+      ],
       // 查询信息
       queryInfo: Object.assign({}, defaultQueryInfo),
       //列表数据
@@ -427,7 +492,9 @@ export default {
         this.dialogVisible = true;
         this.getTitleList();
         this.getEducationList();
+        this.getMajor();
         this.getDrugPositionList();
+        this.getPersonKind();
       } else {
         this.$message({
           message: "请选择门店",
@@ -447,13 +514,28 @@ export default {
         this.educationOptions = res.data;
       });
     },
+    // 获取专业
+    getMajor() {
+      getMajorSelect().then((res) => {
+        this.majorOptions = res.data;
+      });
+    },
     //获取职务
     getDrugPositionList() {
       getDrugPosition().then((res) => {
         this.drugPositionOptions = res.data;
       });
     },
+    // 获取人员类别
+    getPersonKind() {
+      getPeopleKindSelect().then((res) => {
+        if (res.code === 200) {
+          this.peopleKindOptions = res.data;
+        }
+      });
+    },
     queryPerson() {
+      console.log(this.queryInfo.titleIds);
       getMemberList(this.queryInfo).then((res) => {
         this.personList = res.data.list;
         this.total = res.data.total;

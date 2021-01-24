@@ -1,29 +1,22 @@
 <template>
   <div class="app-container">
     <h2>报表查询-实际高于编制</h2>
-    <header-form :query-form="queryForm" @query-info="query"></header-form>
-    <el-row>
-      <el-col :span="4">
-        <el-button type="primary">导出</el-button>
-      </el-col>
-    </el-row>
+    <header-form
+      :query-form="queryForm"
+      @query-info="query"
+      @export-excel="exportExcel"
+    ></header-form>
     <div class="tableContainer">
       <el-table :data="tableData" border>
-        <el-table-column type="index" label="选择" width="100" align="center">
+        <el-table-column prop="shopname" label="门店名称" align="center">
         </el-table-column>
-        <el-table-column prop="shopName" label="门店名称" align="center">
+        <el-table-column prop="type" label="编制要求职称" align="center">
         </el-table-column>
-        <el-table-column prop="name" label="编制要求职称" align="center">
+        <el-table-column prop="num" label="编制要求职称对应人数" align="center">
         </el-table-column>
-        <el-table-column
-          prop="name"
-          label="编制要求职称对应人数"
-          align="center"
-        >
+        <el-table-column prop="nownum" label="实际人员配置数量" align="center">
         </el-table-column>
-        <el-table-column prop="idCard" label="世纪人员配置数量" align="center">
-        </el-table-column>
-        <el-table-column prop="sex" label="差异" align="center">
+        <el-table-column prop="diff" label="差异" align="center">
         </el-table-column>
       </el-table>
     </div>
@@ -45,12 +38,10 @@
 
 <script>
 import HeaderForm from "./components/HeaderForm";
+import { getgybzMemberList, exportgybzMemberList } from "@/api/dataReport";
+
 const defaultForm = {
-  region: null,
   shopName: null,
-  name: null,
-  reportTimeBegin: null,
-  reportTimeEnd: null,
   pagrNum: 1,
   pageSize: 5,
 };
@@ -66,9 +57,39 @@ export default {
     };
   },
   methods: {
+    getTableData() {
+      getgybzMemberList(this.queryForm).then((res) => {
+        if (res.code === 200) {
+          this.tableData = res.data.list;
+        }
+      });
+    },
+    exportExcel() {
+      exportgybzMemberList(this.queryForm.shopId).then((res) => {
+        const blob = new Blob([res], {
+          type:
+            "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=utf-8",
+        });
+        var time = new Date();
+        time =
+          time.getFullYear() +
+          "-" +
+          (time.getMonth() + 1) +
+          "-" +
+          time.getDate();
+        const downloadElement = document.createElement("a");
+        const href = window.URL.createObjectURL(blob);
+        downloadElement.href = href;
+        downloadElement.download = time + "实际高于编制.xlsx";
+        document.body.appendChild(downloadElement);
+        downloadElement.click();
+        document.body.removeChild(downloadElement); // 下载完成移除元素
+        window.URL.revokeObjectURL(href); // 释放掉blob对象
+      });
+    },
     query() {
       this.queryForm.pagrNum = 1;
-      console.log(1);
+      this.getTableData();
     },
     handleSizeChange(newSize) {
       this.queryForm.pagrNum = 1;

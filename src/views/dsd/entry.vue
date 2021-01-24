@@ -64,6 +64,7 @@
         @certainInfo="getPersonList"
         @edit-person="editPerson"
         @delete-person="deletePerson"
+        @update-sort="updateSort"
       ></main-content>
     </div>
     <!-- 分页区域 -->
@@ -191,6 +192,16 @@
         </div>
       </div>
     </el-dialog>
+    <!-- 修改sort -->
+    <el-dialog title="提示" :visible.sync="sortDialogVisible" width="30%">
+      <div>
+        <el-input v-model="sortVal" placeholder="正序排序"></el-input>
+      </div>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="sortDialogVisible = false">取 消</el-button>
+        <el-button type="primary" @click="editSort">确 定</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 
@@ -206,6 +217,8 @@ import {
   sureDrugReport,
   deleteAllDrugReportMember,
   choseShopAddDrugReportMember,
+  changeDrugReportMemberSort,
+  exportDrugReport,
 } from "@/api/declare";
 import {
   update,
@@ -259,6 +272,9 @@ export default {
   },
   data() {
     return {
+      sortDialogVisible: false,
+      sortVal: "",
+      sortId: "",
       reportId: null,
       //部门申报建立日期
       reportTime: "",
@@ -415,18 +431,40 @@ export default {
       this.showBtnDialogVisible = true;
     },
     saveAndExport() {
-      //this.showBtnDialogVisible = false;
-      //this.$router.push("/dsd/console");
       sureDrugReport({
         reportId: this.reportId,
         reportTime: this.reportTime,
       }).then((res) => {
-        this.$message({
-          message: "保存成功",
-          type: "success",
-        });
+        console.log(res);
+        if (res.code === 200) {
+          this.$message({
+            message: "保存成功",
+            type: "success",
+          });
+          exportDrugReport(this.reportId).then((res) => {
+            const blob = new Blob([res], {
+              type:
+                "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=utf-8",
+            });
+            var time = new Date();
+            time =
+              time.getFullYear() +
+              "-" +
+              (time.getMonth() + 1) +
+              "-" +
+              time.getDate();
+            const downloadElement = document.createElement("a");
+            const href = window.URL.createObjectURL(blob);
+            downloadElement.href = href;
+            downloadElement.download = time + "普通导出.xlsx";
+            document.body.appendChild(downloadElement);
+            downloadElement.click();
+            document.body.removeChild(downloadElement); // 下载完成移除元素
+            window.URL.revokeObjectURL(href); // 释放掉blob对象
+          });
+          this.$router.push("/dsd/console");
+        }
         this.showBtnDialogVisible = false;
-        this.$router.push("/dsd/console");
       });
     },
     saveNotExport() {
@@ -482,6 +520,22 @@ export default {
             message: "已取消删除",
           });
         });
+    },
+    updateSort(row) {
+      this.sortDialogVisible = true;
+      this.sortVal = row.sort;
+      this.sortId = row.id;
+    },
+    editSort() {
+      changeDrugReportMemberSort(this.sortId, this.sortVal).then((res) => {
+        if (res.code === 200) {
+          this.$message.success("修改成功!");
+          this.sortDialogVisible = false;
+          this.getPersonList();
+        } else {
+          this.$message.error("修改失败!");
+        }
+      });
     },
     handleSizeChange(newSize) {
       this.queryInfo.pageNum = 1;
