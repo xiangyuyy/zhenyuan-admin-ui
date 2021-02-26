@@ -86,6 +86,16 @@ export function exportbdxgMemberList(sId) {
         responseType: 'blob',
     })
 }
+
+// 导出部门申报变更记录查询列表
+export function exportShopMemberRecordList(params) {
+    return request({
+        url: '/dataReport/exportShopMemberRecordList',
+        method: 'get',
+        params: params,
+        responseType: 'blob',
+    })
+}
 // 导出编制相同人员
 export function exportbzxtMemberList(sId) {
     return request({

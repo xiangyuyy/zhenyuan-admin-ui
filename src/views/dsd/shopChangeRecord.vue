@@ -53,6 +53,7 @@
         </el-form-item>
         <el-form-item>
           <el-button type="primary" @click="queryList">查询</el-button>
+                <el-button type="primary" plain @click="exportShopMemberRecord">导出</el-button>
         </el-form-item>
       </el-form>
     </el-card>
@@ -191,8 +192,9 @@ import {
   member,
   getMemberRecordList,
   getShopMemberRecordList,
+  exportShopMemberRecordList,
 } from "@/api/dataReport";
-import { getAllDepartmentShop, getAllDrugChangeReason } from "@/api/person";
+import { getAllDepartmentShop, getAllDrugChangeReason, } from "@/api/person";
 export default {
   data() {
     return {
@@ -253,6 +255,30 @@ export default {
     queryList() {
       this.getTableData();
     },
+    //导出
+     exportShopMemberRecord() {
+      exportShopMemberRecordList(this.queryInfo).then((res) => {
+        const blob = new Blob([res], {
+          type:
+            "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=utf-8",
+        });
+        var time = new Date();
+        time =
+          time.getFullYear() +
+          "-" +
+          (time.getMonth() + 1) +
+          "-" +
+          time.getDate();
+        const downloadElement = document.createElement("a");
+        const href = window.URL.createObjectURL(blob);
+        downloadElement.href = href;
+        downloadElement.download = time + "申报变更记录.xlsx";
+        document.body.appendChild(downloadElement);
+        downloadElement.click();
+        document.body.removeChild(downloadElement); // 下载完成移除元素
+        window.URL.revokeObjectURL(href); // 释放掉blob对象
+      });
+    },
     handleSizeChange(newSize) {
       this.queryInfo.pageNum = 1;
       this.queryInfo.pageSize = newSize;
@@ -262,18 +288,18 @@ export default {
       this.queryInfo.pageNum = newPage;
       this.getTableData();
     },
-    headerCellStyle(data) {
-      if (data.columnIndex === 3) {
-        return "background:#00FFCC";
-      }
-      return "";
-    },
-    cellStyle(data) {
-      if (data.columnIndex === 3) {
-        return "background:#00FFCC";
-      }
-      return "";
-    },
+    // headerCellStyle(data) {
+    //   if (data.columnIndex === 3) {
+    //     return "background:#00FFCC";
+    //   }
+    //   return "";
+    // },
+    // cellStyle(data) {
+    //   if (data.columnIndex === 3) {
+    //     return "background:#00FFCC";
+    //   }
+    //   return "";
+    // },
   },
   created() {
     // this.getTableData();

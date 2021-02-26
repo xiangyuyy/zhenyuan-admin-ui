@@ -101,20 +101,24 @@
         ></el-table-column>
         <el-table-column prop="id" label="单号" width="120" align="center">
         </el-table-column>
-        <el-table-column prop="shopName" label="门店" width="140" align="center">
+        <el-table-column
+          prop="shopName"
+          label="门店"
+          width="140"
+          align="center"
+        >
         </el-table-column>
         <el-table-column label="申报建立日期" width="140" align="center">
           <template slot-scope="scope"
             >{{ scope.row.reportTime | formatDateTime }}
           </template>
         </el-table-column>
-        <el-table-column prop="operatorName" label="操作员" align="center" >
+        <el-table-column prop="operatorName" label="操作员" align="center">
         </el-table-column>
         <el-table-column label="EXCEL导出" align="center" width="300">
-          <template slot-scope="{row}">
+          <template slot-scope="{ row }">
             <a class="daochu" @click="drive_1(row)">普通导出</a>
             <a class="daochu" @click="drive_2(row)">含药监学校导出</a>
-
           </template>
         </el-table-column>
         <el-table-column label="药监信息" align="center">
@@ -181,27 +185,28 @@
           align="center"
         ></el-table-column>
         <el-table-column
-          prop="drugSchool"
-          label="药监学校"
-          align="center"
-          width="140"
-        ></el-table-column>
-        <el-table-column
-          prop="title"
-          label="职称（获得时间)"
+          prop="drugOrg"
+          label="药监编制职称"
           width="200"
           align="center"
         ></el-table-column>
         <el-table-column
-          prop="education"
-          label="学历"
+          prop="drugEducation"
+          label="药监学历"
+          width="140"
           align="center"
         ></el-table-column>
         <el-table-column
-          prop="major"
-          label="专业"
-          width="180"
+          prop="drugMajor"
+          label="药监专业"
+          width="140"
           align="center"
+        ></el-table-column>
+        <el-table-column
+          prop="drugSchool"
+          label="药监学校"
+          align="center"
+          width="200"
         ></el-table-column>
         <el-table-column
           prop="drugPositionAll"
@@ -302,7 +307,7 @@ import {
   getAllOperator,
   getShopDrugCount,
   exportDrugReport,
-  exportSpecialDrugReport
+  exportSpecialDrugReport,
 } from "@/api/declare";
 import { getAllDepartmentShop } from "@/api/person";
 const defaultSelectInfo = {
@@ -564,7 +569,7 @@ export default {
 }
 .daochu {
   color: blue;
-  &:nth-child(1){
+  &:nth-child(1) {
     margin-right: 20px;
   }
 }

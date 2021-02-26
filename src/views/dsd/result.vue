@@ -14,6 +14,7 @@
         @change="handleChange"
       ></el-cascader>
       <el-button type="primary" plain @click="query"> 查询 </el-button>
+      <el-button type="primary" plain @click="exportDrugCount">导出所有 </el-button>
     </el-card>
 
     <el-table :data="tableData" border style="width: 100%">
@@ -57,7 +58,7 @@
 </template>
 
 <script>
-import { getAllDepartmentShop, getDrugCountList } from "@/api/person";
+import { getAllDepartmentShop, getDrugCountList,exportDrugCountList } from "@/api/person";
 const defaultToolForm = {
   shopId: null,
   subjection: null,
@@ -105,6 +106,30 @@ export default {
     },
     query() {
       this.getTableData();
+    },
+    //导出
+     exportDrugCount() {
+      exportDrugCountList().then((res) => {
+        const blob = new Blob([res], {
+          type:
+            "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=utf-8",
+        });
+        var time = new Date();
+        time =
+          time.getFullYear() +
+          "-" +
+          (time.getMonth() + 1) +
+          "-" +
+          time.getDate();
+        const downloadElement = document.createElement("a");
+        const href = window.URL.createObjectURL(blob);
+        downloadElement.href = href;
+        downloadElement.download = time + "药监计算结果.xlsx";
+        document.body.appendChild(downloadElement);
+        downloadElement.click();
+        document.body.removeChild(downloadElement); // 下载完成移除元素
+        window.URL.revokeObjectURL(href); // 释放掉blob对象
+      });
     },
     // 获得表格数据
     getTableData() {

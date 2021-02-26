@@ -92,20 +92,41 @@
           align="center"
         ></el-table-column>
         <el-table-column
-          prop="title"
-          label="职称（获得时间)"
+          prop="drugShopName"
+          label="药监门店"
+          width="180"
+          align="center"
+        >
+        </el-table-column>
+        <!-- <el-table-column
+          prop="isInvitual"
+          label="是否虚挂"
+          width="100"
+          align="center"
+        ></el-table-column> -->
+        <el-table-column
+          prop="drugOrg"
+          label="药监编制职称"
           width="200"
           align="center"
         ></el-table-column>
         <el-table-column
-          prop="education"
-          label="学历"
+          prop="drugEducation"
+          label="药监学历"
+          width="140"
           align="center"
         ></el-table-column>
         <el-table-column
-          prop="major"
-          label="专业"
+          prop="drugMajor"
+          label="药监专业"
+          width="140"
           align="center"
+        ></el-table-column>
+        <el-table-column
+          prop="drugSchool"
+          label="药监学校"
+          align="center"
+          width="200"
         ></el-table-column>
         <el-table-column
           prop="drugPositionAll"

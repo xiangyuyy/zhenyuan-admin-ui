@@ -304,6 +304,7 @@
           <el-table-column
             prop="shopName"
             label="门店"
+            width="150"
             align="center"
           ></el-table-column>
           <el-table-column
@@ -312,8 +313,14 @@
             width="150"
             align="center"
           ></el-table-column>
-          <el-table-column prop="name" label="姓名" align="center">
+          <el-table-column prop="name" label="姓名" width="120" align="center">
           </el-table-column>
+          <el-table-column
+            prop="peopleKind"
+            label="人员类别"
+            width="150"
+            align="center"
+          ></el-table-column>
           <el-table-column
             prop="title"
             label="职称（获得时间)"
@@ -321,7 +328,7 @@
             align="center"
           ></el-table-column>
           <el-table-column
-            prop="drugTitle"
+            prop="drugOrg"
             label="药监职称"
             width="120"
             align="center"
@@ -329,11 +336,25 @@
           <el-table-column
             prop="education"
             label="学历"
+            width="120"
+            align="center"
+          ></el-table-column>
+          <el-table-column
+            prop="drugEducation"
+            label="药监学历"
+            width="120"
             align="center"
           ></el-table-column>
           <el-table-column
             prop="major"
             label="专业"
+            width="120"
+            align="center"
+          ></el-table-column>
+          <el-table-column
+            prop="drugMajor"
+            label="药监专业"
+            width="120"
             align="center"
           ></el-table-column>
           <el-table-column
@@ -342,9 +363,9 @@
             width="150"
             align="center"
           ></el-table-column>
-          <el-table-column
-            prop="peopleKind"
-            label="人员类别"
+                    <el-table-column
+            prop="drugSchool"
+            label="药监学校"
             width="150"
             align="center"
           ></el-table-column>
@@ -424,7 +445,7 @@ const defaultForm = {
   drugShopId: null,
   drugMajorId: null,
   drugEducationId: null,
-    drugSchool: null,
+  drugSchool: null,
   workTime: null,
 };
 export default {
@@ -467,7 +488,7 @@ export default {
       drugMajorList: null,
       // 药监学历
       drugEducationList: null,
-                  // 药监学校
+      // 药监学校
       drugSchoolList: null,
       //录入/修改表单
       form: Object.assign({}, defaultForm),
@@ -547,26 +568,14 @@ export default {
       });
     },
     headerCellStyle(data) {
-      if (data.columnIndex === 2) {
-        return "background:#00FFCC";
-      } else if (
-        data.columnIndex === 3 ||
-        (data.columnIndex >= 12 && data.columnIndex <= 17)
-      ) {
+      if (data.columnIndex >= 12 && data.columnIndex <= 15) {
         return "background:#FFFF66";
       }
       return "";
     },
     cellStyle(data) {
-      if (data.columnIndex === 2) {
-        return "background:#00FFCC";
-      } else if (
-        (data.columnIndex === 3) ||
-        (data.columnIndex >= 12 && data.columnIndex <= 17)
-      ) {
+      if (data.columnIndex >= 12 && data.columnIndex <= 15) {
         return "background:#FFFF66";
-      } else if (data.columnIndex >= 18 && data.columnIndex <= 20) {
-        return "background:#33CC66";
       }
       return "";
     },
@@ -604,24 +613,20 @@ export default {
       this.selectAddPerson();
     },
     headerDialogStyle(data) {
-      if (data.columnIndex === 2) {
-        return "background:#00FFCC";
-      } else if (
-        data.columnIndex === 5 ||
+      if (
+        data.columnIndex === 4 ||
         data.columnIndex === 8 ||
-        data.columnIndex === 9
+        data.columnIndex === 10
       ) {
         return "background:#FFFF66";
       }
       return "";
     },
     cellDialogStyle(data) {
-      if (data.columnIndex === 2) {
-        return "background:#00FFCC";
-      } else if (
-        data.columnIndex === 5 ||
+      if (
+        data.columnIndex === 4 ||
         data.columnIndex === 8 ||
-        data.columnIndex === 9
+        data.columnIndex === 10
       ) {
         return "background:#FFFF66";
       }
@@ -637,7 +642,7 @@ export default {
       getMemberEducation(row.id).then((res) => {
         this.drugEducationList = res.data;
       });
-                  // 获取药监学校
+      // 获取药监学校
       getDrugSchoolOptions(row.id).then((res) => {
         this.drugSchoolList = res.data;
       });

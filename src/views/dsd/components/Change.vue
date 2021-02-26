@@ -64,38 +64,46 @@
           label="年龄"
           align="center"
         ></el-table-column>
-        <el-table-column
-          prop="title"
-          label="职称（获得时间)"
+                <el-table-column
+          prop="drugShopName"
+          label="药监门店"
+          width="180"
+          align="center"
+        ></el-table-column>
+                <el-table-column
+          prop="isInvitual"
+          label="是否虚挂"
+                    width="100"
+          align="center"
+        ></el-table-column>
+      <el-table-column
+          prop="drugOrg"
+          label="药监编制职称"
           width="200"
           align="center"
         ></el-table-column>
         <el-table-column
-          prop="drugTitle"
-          label="药监上报职称"
-          width="120"
+          prop="drugEducation"
+          label="药监学历"
+          width="140"
           align="center"
         ></el-table-column>
         <el-table-column
-          prop="drugOrg"
-          label="药监编制职称"
-          width="120"
+          prop="drugMajor"
+          label="药监专业"
+          width="140"
           align="center"
         ></el-table-column>
         <el-table-column
-          prop="education"
-          label="学历"
+          prop="drugSchool"
+          label="药监学校"
           align="center"
+          width="200"
         ></el-table-column>
         <el-table-column
-          prop="major"
-          label="专业"
-          align="center"
-        ></el-table-column>
-        <el-table-column
-          prop="drugPositionOne"
+          prop="drugPositionAll"
           label="职务或岗位"
-          width="150"
+          width="160"
           align="center"
         ></el-table-column>
         <el-table-column label="参加专业工作时间" width="240" align="center">
@@ -103,35 +111,24 @@
             {{ scope.row.workTime | formatDateTime }}
           </template>
         </el-table-column>
-        <el-table-column label="健康状况" align="center">
+        <el-table-column label="健康状况" width="120" align="center">
           <template slot-scope="{ row }">
             <span v-if="row.healthStatus === 0">不健康</span>
             <span v-else>健康</span>
           </template>
         </el-table-column>
-        <el-table-column label="是否继续教育" align="center">
+        <el-table-column label="是否继续教育" width="140" align="center">
           <template slot-scope="{ row }">
             <span v-if="row.educationStatus === 0">否</span>
             <span v-else>是</span>
           </template>
         </el-table-column>
-        <el-table-column label="是否参加培训" align="center">
+        <el-table-column label="是否参加培训" width="140" align="center">
           <template slot-scope="{ row }">
             <span v-if="row.trainStatus === 0">否</span>
             <span v-else>是</span>
           </template>
         </el-table-column>
-        <el-table-column
-          prop="isInvitual"
-          label="是否虚拟"
-          align="center"
-        ></el-table-column>
-        <el-table-column
-          prop="drugShopName"
-          label="药监门店"
-          width="180"
-          align="center"
-        ></el-table-column>
       </el-table>
     </div>
     <!-- 分页区域 -->
@@ -532,30 +529,30 @@ export default {
       this.queryInfo.pageNum = newPage;
       this.getUserList();
     },
-    headerCellStyle(data) {
-      if (
-        data.columnIndex === 8 ||
-        data.columnIndex === 9 ||
-        data.columnIndex === 12 ||
-        data.columnIndex === 13
-      ) {
-        return "background:#FFFF66";
-      }
-      return "";
-    },
-    cellStyle(data) {
-      if (
-        data.columnIndex === 8 ||
-        data.columnIndex === 9 ||
-        data.columnIndex === 12 ||
-        data.columnIndex === 13
-      ) {
-        return "background:#FFFF66";
-      } else if (data.columnIndex >= 14 && data.columnIndex <= 17) {
-        return "background:#33CC66";
-      }
-      return "";
-    },
+    // headerCellStyle(data) {
+    //   if (
+    //     data.columnIndex === 8 ||
+    //     data.columnIndex === 9 ||
+    //     data.columnIndex === 12 ||
+    //     data.columnIndex === 13
+    //   ) {
+    //     return "background:#FFFF66";
+    //   }
+    //   return "";
+    // },
+    // cellStyle(data) {
+    //   if (
+    //     data.columnIndex === 8 ||
+    //     data.columnIndex === 9 ||
+    //     data.columnIndex === 12 ||
+    //     data.columnIndex === 13
+    //   ) {
+    //     return "background:#FFFF66";
+    //   } else if (data.columnIndex >= 14 && data.columnIndex <= 17) {
+    //     return "background:#33CC66";
+    //   }
+    //   return "";
+    // },
   },
   created() {
     this.getHeaderInfo();

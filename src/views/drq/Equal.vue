@@ -20,7 +20,7 @@
         </el-table-column>
         <el-table-column prop="name" label="姓名" align="center">
         </el-table-column>
-        <el-table-column prop="name" label="药监门店" align="center">
+        <el-table-column prop="drugShopName" label="药监门店" align="center">
         </el-table-column>
         <el-table-column prop="idCard" label="身份证号码" align="center">
         </el-table-column>

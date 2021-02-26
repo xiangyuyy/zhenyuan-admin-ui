@@ -122,6 +122,7 @@
         </el-form-item>
         <el-form-item>
           <el-button type="primary" @click="queryPerson">查询</el-button>
+         <el-button type="primary" @click="exportMember">导出所有人员</el-button>
         </el-form-item>
       </el-form>
       <el-row :gutter="20">
@@ -205,6 +206,17 @@
           width="200"
           align="center"
         ></el-table-column>
+                <el-table-column
+          prop="education"
+          label="学历"
+          width="120"
+          align="center"
+        ></el-table-column>
+        <el-table-column
+          prop="major"
+          label="专业"
+          align="center"
+        ></el-table-column>
         <el-table-column
           prop="drugTitle"
           label="药监上报职称"
@@ -224,25 +236,8 @@
           align="center"
         ></el-table-column>
         <el-table-column
-          prop="education"
-          label="学历"
-          width="120"
-          align="center"
-        ></el-table-column>
-        <el-table-column
-          prop="major"
-          label="专业"
-          align="center"
-        ></el-table-column>
-        <el-table-column
           prop="drugMajor"
           label="药监专业"
-          width="120"
-          align="center"
-        ></el-table-column>
-         <el-table-column
-          prop="peopleKind"
-          label="人员类别"
           width="120"
           align="center"
         ></el-table-column>
@@ -250,6 +245,12 @@
           prop="drugPositionAll"
           label="职务或岗位"
           width="140"
+          align="center"
+        ></el-table-column>
+                 <el-table-column
+          prop="peopleKind"
+          label="人员类别"
+          width="120"
           align="center"
         ></el-table-column>
         <el-table-column label="参加专业工作时间" width="180" align="center">
@@ -321,7 +322,8 @@ import {
   getMemberMajor,
   getMemberEducation,
   getPeopleKindSelect,
-  getDrugSchoolOptions
+  getDrugSchoolOptions,
+  exportMemberList
 } from "@/api/person";
 import { member, getAllEducation } from "@/api/declare";
 import ShowDialog from "@/components/ShowDialog/ShowDialog";
@@ -410,6 +412,30 @@ export default {
       this.queryInfo.pageNum = 1;
       this.getUserList();
       // this.queryInfo = Object.assign({}, defaultQueryInfo);
+    },
+    //导出人员
+     exportMember() {
+      exportMemberList().then((res) => {
+        const blob = new Blob([res], {
+          type:
+            "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=utf-8",
+        });
+        var time = new Date();
+        time =
+          time.getFullYear() +
+          "-" +
+          (time.getMonth() + 1) +
+          "-" +
+          time.getDate();
+        const downloadElement = document.createElement("a");
+        const href = window.URL.createObjectURL(blob);
+        downloadElement.href = href;
+        downloadElement.download = time + "人员列表.xlsx";
+        document.body.appendChild(downloadElement);
+        downloadElement.click();
+        document.body.removeChild(downloadElement); // 下载完成移除元素
+        window.URL.revokeObjectURL(href); // 释放掉blob对象
+      });
     },
     //获取门店
     getShopOptions() {
@@ -533,28 +559,18 @@ export default {
       });
     },
     headerCellStyle(data) {
-      if (data.columnIndex === 2) {
-        return "background:#00FFCC";
-      } else if (
-        data.columnIndex === 3 ||
-        (data.columnIndex >= 10 && data.columnIndex <= 12) ||
-        (data.columnIndex >= 15 && data.columnIndex <= 17)
+       if (
+        (data.columnIndex >= 12 && data.columnIndex <= 15)
       ) {
         return "background:#FFFF66";
       }
       return "";
     },
     cellStyle(data) {
-      if (data.columnIndex === 2) {
-        return "background:#00FFCC";
-      } else if (
-        data.columnIndex === 3 ||
-        (data.columnIndex >= 10 && data.columnIndex <= 12) ||
-        (data.columnIndex >= 15 && data.columnIndex <= 17)
+       if (
+        (data.columnIndex >= 12 && data.columnIndex <= 15)
       ) {
         return "background:#FFFF66";
-      } else if (data.columnIndex >= 18 && data.columnIndex <= 20) {
-        return "background:#33CC66";
       }
       return "";
     },
