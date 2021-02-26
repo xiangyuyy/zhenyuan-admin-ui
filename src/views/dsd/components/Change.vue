@@ -311,6 +311,24 @@
                 </el-select>
               </el-form-item>
             </el-col>
+             <el-col :span="12">
+              <el-form-item label="药监学校">
+                <el-select
+                  v-model="dialogForm.drugSchool"
+                  filterable
+                  clearable
+                  placeholder="请选择"
+                >
+                  <el-option
+                    v-for="item in drugSchoolOptions"
+                    :key="item.value"
+                    :label="item.label"
+                    :value="item.value"
+                  >
+                  </el-option>
+                </el-select>
+              </el-form-item>
+            </el-col>
             <el-col :span="12">
               <el-form-item label="参加工作时间">
                 <el-date-picker
@@ -382,6 +400,7 @@ import {
   getShopSelect,
   filterTree,
   getAllDrugChangeReason,
+      getDrugSchoolOptions,
 } from "@/api/person";
 export default {
   data() {
@@ -402,6 +421,7 @@ export default {
       drugShopOptions: null,
       drugMajorOptions: null,
       drugEducationOptions: null,
+                  drugSchoolOptions: null,
       changeReasonOptions: null,
       //控制变更对话框的显示
       dialogVisible: false,
@@ -416,6 +436,7 @@ export default {
         drugShopId: null,
         drugMajorId: null,
         drugEducationId: null,
+        drugSchool: null,
         workTime: null,
         createTime: null,
         changeReason: null,
@@ -477,6 +498,15 @@ export default {
       getMemberEducation(row.memberId).then((res) => {
         this.drugEducationOptions = res.data;
       });
+            // 获取药监学历
+      getMemberEducation(row.memberId).then((res) => {
+        this.drugEducationOptions = res.data;
+      });
+              // 获取药监学校
+      getDrugSchoolOptions(row.memberId).then((res) => {
+        this.drugSchoolOptions = res.data;
+      });
+      
       getMemberRecord(row.id).then((res) => {
         this.dialogForm = res.data;
         this.dialogVisible = true;

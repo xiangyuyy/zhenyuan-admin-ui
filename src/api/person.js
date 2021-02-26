@@ -85,6 +85,15 @@ export function getMemberEducation(id) {
     })
 }
 
+
+// 药监学校
+export function getDrugSchoolOptions(id) {
+    return request({
+        url: '/member/getMemberDrugSchool/' + id,
+        method: 'get'
+    })
+}
+
 // 变更原因
 export function getAllDrugChangeReason() {
     return request({

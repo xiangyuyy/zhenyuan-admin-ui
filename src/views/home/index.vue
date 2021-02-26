@@ -1,6 +1,6 @@
 <template>
   <div class="app-container">
-    <h1>欢迎进入震元药业集团</h1>
+    <h1>欢迎进入浙江震元</h1>
   </div>
 </template>
 

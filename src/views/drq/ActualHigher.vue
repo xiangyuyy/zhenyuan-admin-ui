@@ -42,7 +42,7 @@ import { getgybzMemberList, exportgybzMemberList } from "@/api/dataReport";
 
 const defaultForm = {
   shopName: null,
-  pagrNum: 1,
+  pageNum: 1,
   pageSize: 5,
 };
 export default {
@@ -61,6 +61,7 @@ export default {
       getgybzMemberList(this.queryForm).then((res) => {
         if (res.code === 200) {
           this.tableData = res.data.list;
+          this.total = res.data.total;
         }
       });
     },
@@ -88,15 +89,17 @@ export default {
       });
     },
     query() {
-      this.queryForm.pagrNum = 1;
+      this.queryForm.pageNum = 1;
       this.getTableData();
     },
     handleSizeChange(newSize) {
-      this.queryForm.pagrNum = 1;
+      this.queryForm.pageNum = 1;
       this.queryForm.pageSize = newSize;
+      this.getTableData();
     },
     handleCurrentChange(newPage) {
-      this.pagrNum = newPage;
+      this.queryForm.pageNum = newPage;
+      this.getTableData();
     },
   },
 };

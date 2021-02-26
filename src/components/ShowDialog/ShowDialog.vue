@@ -175,6 +175,24 @@
               </el-form-item>
             </el-col>
             <el-col :span="12">
+              <el-form-item label="药监学校">
+                <el-select
+                  v-model="dialogForm.drugSchool"
+                  filterable
+                  clearable
+                  placeholder="请选择"
+                >
+                  <el-option
+                    v-for="item in drugSchoolOptions"
+                    :key="item.value"
+                    :label="item.label"
+                    :value="item.value"
+                  >
+                  </el-option>
+                </el-select>
+              </el-form-item>
+            </el-col>
+            <el-col :span="12">
               <el-form-item label="参加工作时间">
                 <el-date-picker
                   v-model="dialogForm.workTime"
@@ -202,11 +220,12 @@
 import {
   getDrugPosition,
   getDrugTitleSelect,
+  getDrugSchoolOptions,
   getDrugOrgSelect,
 } from "@/api/showDialog";
 import { getAllDepartmentShop, getShopSelect, filterTree } from "@/api/person";
 export default {
-  props: ["showDialogVisible", "isEdit", "drugMajor", "drugEducation", "form"],
+  props: ["showDialogVisible", "isEdit", "drugMajor", "drugEducation", "form", "drugSchool"],
   data() {
     return {
       dialogVisible: this.showDialogVisible,
@@ -215,6 +234,7 @@ export default {
       drugPositionOptions: null,
       drugTitleOptions: null,
       drugOrgOptions: null,
+      drugSchoolOptions: this.drugSchool,
       drugShopOptions: null,
       drugMajorOptions: this.drugMajor,
       drugEducationOptions: this.drugEducation,
@@ -240,6 +260,9 @@ export default {
     },
     drugEducation() {
       this.drugEducationOptions = this.drugEducation;
+    },
+        drugSchool() {
+      this.drugSchoolOptions = this.drugSchool;
     },
     form() {
       this.dialogForm = this.form;

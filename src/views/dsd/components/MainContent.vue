@@ -78,6 +78,17 @@
         align="center"
       ></el-table-column>
       <el-table-column
+        prop="education"
+        label="学历"
+        align="center"
+      ></el-table-column>
+      <el-table-column
+        prop="major"
+        label="专业"
+        width="180"
+        align="center"
+      ></el-table-column>
+      <el-table-column
         prop="drugTitle"
         label="药监上报职称"
         width="140"
@@ -93,17 +104,6 @@
         prop="drugEducation"
         label="药监学历"
         width="120"
-        align="center"
-      ></el-table-column>
-      <el-table-column
-        prop="education"
-        label="学历"
-        align="center"
-      ></el-table-column>
-      <el-table-column
-        prop="major"
-        label="专业"
-        width="180"
         align="center"
       ></el-table-column>
       <el-table-column
@@ -306,6 +306,12 @@
             label="门店"
             align="center"
           ></el-table-column>
+          <el-table-column
+            prop="drugShopName"
+            label="药监门店"
+            width="150"
+            align="center"
+          ></el-table-column>
           <el-table-column prop="name" label="姓名" align="center">
           </el-table-column>
           <el-table-column
@@ -336,15 +342,9 @@
             width="150"
             align="center"
           ></el-table-column>
-           <el-table-column
+          <el-table-column
             prop="peopleKind"
             label="人员类别"
-            width="150"
-            align="center"
-          ></el-table-column>
-          <el-table-column
-            prop="drugShopName"
-            label="虚拟挂职药店"
             width="150"
             align="center"
           ></el-table-column>
@@ -374,6 +374,7 @@
       :is-edit="isEdit"
       :drugMajor="drugMajorList"
       :drugEducation="drugEducationList"
+      :drugSchool="drugSchoolList"
       :form="form"
       :showDialogVisible="yaoJiandialog"
       @commit-form="confirmEdit"
@@ -397,6 +398,7 @@ import {
   update,
   getMajorSelect,
   getPeopleKindSelect,
+  getDrugSchoolOptions,
 } from "@/api/person";
 import ShowDialog from "@/components/ShowDialog/ShowDialog";
 const defaultQueryInfo = {
@@ -422,6 +424,7 @@ const defaultForm = {
   drugShopId: null,
   drugMajorId: null,
   drugEducationId: null,
+    drugSchool: null,
   workTime: null,
 };
 export default {
@@ -464,6 +467,8 @@ export default {
       drugMajorList: null,
       // 药监学历
       drugEducationList: null,
+                  // 药监学校
+      drugSchoolList: null,
       //录入/修改表单
       form: Object.assign({}, defaultForm),
     };
@@ -546,8 +551,7 @@ export default {
         return "background:#00FFCC";
       } else if (
         data.columnIndex === 3 ||
-        (data.columnIndex >= 10 && data.columnIndex <= 12) ||
-        (data.columnIndex >= 15 && data.columnIndex <= 17)
+        (data.columnIndex >= 12 && data.columnIndex <= 17)
       ) {
         return "background:#FFFF66";
       }
@@ -557,9 +561,8 @@ export default {
       if (data.columnIndex === 2) {
         return "background:#00FFCC";
       } else if (
-        data.columnIndex === 3 ||
-        (data.columnIndex >= 10 && data.columnIndex <= 12) ||
-        (data.columnIndex >= 15 && data.columnIndex <= 17)
+        (data.columnIndex === 3) ||
+        (data.columnIndex >= 12 && data.columnIndex <= 17)
       ) {
         return "background:#FFFF66";
       } else if (data.columnIndex >= 18 && data.columnIndex <= 20) {
@@ -633,6 +636,10 @@ export default {
       // 获取药监学历
       getMemberEducation(row.id).then((res) => {
         this.drugEducationList = res.data;
+      });
+                  // 获取药监学校
+      getDrugSchoolOptions(row.id).then((res) => {
+        this.drugSchoolList = res.data;
       });
       member(row.id).then((res) => {
         this.form = res.data;

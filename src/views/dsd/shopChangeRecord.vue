@@ -5,43 +5,51 @@
       <el-form :inline="true" :model="queryInfo" class="demo-form-inline">
         <el-form-item label="门店/区域">
           <el-cascader
-           expand-trigger="hover"
-              filterable
-              v-model="shopIdList"
-              :options="shopOptions"
-              :props="cascaderProps"
-              :show-all-levels="false"
-              @change="handleChange"
+            expand-trigger="hover"
+            filterable
+            v-model="shopIdList"
+            :options="shopOptions"
+            :props="cascaderProps"
+            :show-all-levels="false"
+            @change="handleChange"
           ></el-cascader>
         </el-form-item>
+
+        <el-form-item label="姓名">
+          <el-input
+            v-model="queryInfo.name"
+            placeholder="请输入姓名"
+            clearable
+          ></el-input>
+        </el-form-item>
         <el-form-item label="变更原因">
-         <el-select
-              v-model="queryInfo.changeReason"
-              placeholder="请选择变更原因"
+          <el-select
+            v-model="queryInfo.changeReason"
+            placeholder="请选择变更原因"
+          >
+            <el-option
+              v-for="item in bianGengReasonOptions"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
             >
-              <el-option
-                v-for="item in bianGengReasonOptions"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value"
-              >
-              </el-option>
-            </el-select>
+            </el-option>
+          </el-select>
         </el-form-item>
         <el-form-item label="时间">
-            <el-date-picker
-              v-model="queryInfo.createTimeBegin"
-              type="date"
-              placeholder="开始"
-            >
-            </el-date-picker
-            >—
-            <el-date-picker
-              v-model="queryInfo.createTimeEnd"
-              type="date"
-              placeholder="结束"
-            >
-            </el-date-picker>
+          <el-date-picker
+            v-model="queryInfo.createTimeBegin"
+            type="date"
+            placeholder="开始"
+          >
+          </el-date-picker
+          >—
+          <el-date-picker
+            v-model="queryInfo.createTimeEnd"
+            type="date"
+            placeholder="结束"
+          >
+          </el-date-picker>
         </el-form-item>
         <el-form-item>
           <el-button type="primary" @click="queryList">查询</el-button>
@@ -67,6 +75,13 @@
         <el-table-column
           prop="reportId"
           label="单号"
+          width="180"
+          align="center"
+        >
+        </el-table-column>
+        <el-table-column
+          prop="shopName"
+          label="门店"
           width="180"
           align="center"
         >
@@ -107,19 +122,21 @@
           align="center"
         ></el-table-column>
         <el-table-column
-          prop="title"
-          label="职称（获得时间)"
+          prop="drugOrg"
+          label="药监职称"
           width="200"
           align="center"
         ></el-table-column>
         <el-table-column
-          prop="education"
-          label="学历"
+          prop="drugEducation"
+          label="药监学历"
+          width="200"
           align="center"
         ></el-table-column>
         <el-table-column
-          prop="major"
-          label="专业"
+          prop="drugMajor"
+          label="药监专业"
+          width="200"
           align="center"
         ></el-table-column>
         <el-table-column
@@ -196,6 +213,7 @@ export default {
         shopId: null,
         // 变更原因
         changeReason: null,
+        name: null,
         createTimeBegin: null,
         createTimeEnd: null,
         pageNum: 1,
@@ -213,10 +231,10 @@ export default {
       });
     },
     handleChange(val) {
-        console.log(val);
+      console.log(val);
       this.shopIdList = val;
       this.queryInfo.shopId = String([val[Array.from(val).length - 1]]);
-      console.log( this.queryInfo.shopId);
+      console.log(this.queryInfo.shopId);
     },
     // 获取变更原因
     getChangeReason() {

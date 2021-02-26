@@ -119,6 +119,7 @@
       :is-edit="isEdit"
       :drugMajor="drugMajorList"
       :drugEducation="drugEducationList"
+      :drugSchool="drugSchoolList"
       :form="form"
       :showDialogVisible="dialogVisible"
       @commit-form="editForm"
@@ -153,7 +154,7 @@ import {
   getShopDrugCount,
   changeDrugReportMemberSort,
 } from "@/api/declare";
-import { update, getMemberMajor, getMemberEducation } from "@/api/person";
+import { update, getMemberMajor, getMemberEducation,getDrugSchoolOptions} from "@/api/person";
 import MainContent from "./MainContent";
 import ShowDialog from "@/components/ShowDialog/ShowDialog";
 
@@ -167,6 +168,7 @@ const defaultForm = {
   drugShopId: null,
   drugMajorId: null,
   drugEducationId: null,
+    drugSchool: null,
   workTime: null,
 };
 
@@ -210,6 +212,8 @@ export default {
       drugMajorList: null,
       // 药监学历
       drugEducationList: null,
+                  // 药监学校
+      drugSchoolList: null,
       //录入/修改表单
       form: Object.assign({}, defaultForm),
       //按钮对话框
@@ -304,6 +308,10 @@ export default {
       // 获取药监学历
       getMemberEducation(row.memberId).then((res) => {
         this.drugEducationList = res.data;
+      });
+                  // 获取药监学校
+      getDrugSchoolOptions(row.memberId).then((res) => {
+        this.drugSchoolList = res.data;
       });
       member(row.memberId).then((res) => {
         this.form = res.data;

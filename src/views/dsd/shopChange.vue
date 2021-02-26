@@ -367,6 +367,24 @@
               </el-form-item>
             </el-col>
             <el-col :span="12">
+              <el-form-item label="药监学校">
+                <el-select
+                  v-model="dialogForm.drugSchool"
+                  filterable
+                  clearable
+                  placeholder="请选择"
+                >
+                  <el-option
+                    v-for="item in drugSchoolOptions"
+                    :key="item.value"
+                    :label="item.label"
+                    :value="item.value"
+                  >
+                  </el-option>
+                </el-select>
+              </el-form-item>
+            </el-col>
+            <el-col :span="12">
               <el-form-item label="参加工作时间">
                 <el-date-picker
                   v-model="dialogForm.workTime"
@@ -538,6 +556,12 @@
             label="门店"
             align="center"
           ></el-table-column>
+          <el-table-column
+            prop="drugShopName"
+            label="药监门店"
+            width="150"
+            align="center"
+          ></el-table-column>
           <el-table-column prop="name" label="姓名" align="center">
           </el-table-column>
           <el-table-column
@@ -565,12 +589,6 @@
           <el-table-column
             prop="drugPositionAll"
             label="职务或岗位"
-            width="150"
-            align="center"
-          ></el-table-column>
-          <el-table-column
-            prop="drugShopName"
-            label="虚拟挂职药店"
             width="150"
             align="center"
           ></el-table-column>
@@ -625,6 +643,7 @@ import {
   filterTree,
   getAllTitle,
   getAllDrugChangeReason,
+      getDrugSchoolOptions,
 } from "@/api/person";
 
 const defaultToolForm = {
@@ -678,6 +697,7 @@ export default {
       drugShopOptions: null,
       drugMajorOptions: null,
       drugEducationOptions: null,
+      drugSchoolOptions:null,
       changeReasonOptions: null,
       //控制变更对话框的显示
       dialogVisible: false,
@@ -692,8 +712,9 @@ export default {
         drugShopId: null,
         drugMajorId: null,
         drugEducationId: null,
+        drugSchool: null,
         workTime: null,
-        createTime:null,
+        createTime: null,
         changeReason: null,
         changeReasonOptions: null,
       },
@@ -858,6 +879,10 @@ export default {
       getMemberEducation(row.memberId).then((res) => {
         this.drugEducationOptions = res.data;
       });
+            // 获取药监学校
+      getDrugSchoolOptions(row.memberId).then((res) => {
+        this.drugSchoolOptions = res.data;
+      });
       getMemberRecord(row.id).then((res) => {
         this.dialogForm = res.data;
         this.dialogVisible = true;
@@ -974,6 +999,7 @@ export default {
     this.getShopOptions();
     this.getChangeReason();
     this.getShopList();
+    
   },
 };
 </script>
