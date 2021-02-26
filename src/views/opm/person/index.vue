@@ -122,7 +122,9 @@
         </el-form-item>
         <el-form-item>
           <el-button type="primary" @click="queryPerson">查询</el-button>
-         <el-button type="primary" @click="exportMember">导出所有人员</el-button>
+          <el-button type="primary" @click="exportMember"
+            >导出所有人员</el-button
+          >
         </el-form-item>
       </el-form>
       <el-row :gutter="20">
@@ -206,7 +208,7 @@
           width="200"
           align="center"
         ></el-table-column>
-                <el-table-column
+        <el-table-column
           prop="education"
           label="学历"
           width="120"
@@ -247,7 +249,7 @@
           width="140"
           align="center"
         ></el-table-column>
-                 <el-table-column
+        <el-table-column
           prop="peopleKind"
           label="人员类别"
           width="120"
@@ -323,17 +325,18 @@ import {
   getMemberEducation,
   getPeopleKindSelect,
   getDrugSchoolOptions,
-  exportMemberList
+  exportMemberList,
 } from "@/api/person";
 import { member, getAllEducation } from "@/api/declare";
 import ShowDialog from "@/components/ShowDialog/ShowDialog";
+import { Loading } from "element-ui";
 const defaultQueryInfo = {
   // shopId: null,
   shopIds: [],
   name: null,
   drugPositionId: null,
   isNullDrugShopId: null,
-  peopleKindId:null,
+  peopleKindId: null,
   major: null,
   educationId: null,
   titleIds: null,
@@ -350,7 +353,7 @@ const defaultForm = {
   drugShopId: null,
   drugMajorId: null,
   drugEducationId: null,
-    drugSchool: null,
+  drugSchool: null,
   workTime: null,
 };
 export default {
@@ -372,10 +375,10 @@ export default {
       majorOptions: null,
       //岗位或职务
       drugPositionOptions: null,
-      peopleKindOptions:null,
+      peopleKindOptions: null,
       drugShopOptions: [
-        { label: '空', value: 0 },
-        { label: '非空', value: 1},
+        { label: "空", value: 0 },
+        { label: "非空", value: 1 },
       ],
       // 学历
       educationOptions: null,
@@ -394,7 +397,7 @@ export default {
       drugMajorList: null,
       // 药监学历
       drugEducationList: null,
-                  // 药监学校
+      // 药监学校
       drugSchoolList: null,
       form: Object.assign({}, defaultForm),
       //总条数
@@ -408,13 +411,21 @@ export default {
         this.total = res.data.total;
       });
     },
+
     queryPerson() {
       this.queryInfo.pageNum = 1;
       this.getUserList();
       // this.queryInfo = Object.assign({}, defaultQueryInfo);
     },
     //导出人员
-     exportMember() {
+    exportMember() {
+      let options = {
+        lock: true, //lock的修改符--默认是false
+        text: "Loading", //显示在加载图标下方的加载文案
+        spinner: "el-icon-loading", //自定义加载图标类名
+        background: "rgba(0, 0, 0, 0.7)", //遮罩层颜色
+      };
+      let loadingInstance = Loading.service(options);
       exportMemberList().then((res) => {
         const blob = new Blob([res], {
           type:
@@ -435,6 +446,7 @@ export default {
         downloadElement.click();
         document.body.removeChild(downloadElement); // 下载完成移除元素
         window.URL.revokeObjectURL(href); // 释放掉blob对象
+        loadingInstance.close();
       });
     },
     //获取门店
@@ -472,14 +484,14 @@ export default {
         this.titleOptions = res.data;
       });
     },
-  // 获取人员类别
-  getPersonKind(){
-    getPeopleKindSelect().then(res=>{
-      if(res.code===200){
-        this.peopleKindOptions=res.data
-      }
-    })
-  },
+    // 获取人员类别
+    getPersonKind() {
+      getPeopleKindSelect().then((res) => {
+        if (res.code === 200) {
+          this.peopleKindOptions = res.data;
+        }
+      });
+    },
     getMajorOptions() {
       getMajorSelect().then((res) => {
         this.majorOptions = res.data;
@@ -501,10 +513,10 @@ export default {
         getMemberEducation(this.form.id).then((res) => {
           this.drugEducationList = res.data;
         });
-                    // 获取药监学校
-      getDrugSchoolOptions(this.form.id).then((res) => {
-        this.drugSchoolList = res.data;
-      });
+        // 获取药监学校
+        getDrugSchoolOptions(this.form.id).then((res) => {
+          this.drugSchoolList = res.data;
+        });
         //获取人员信息
         member(this.form.id).then((res) => {
           this.form = res.data;
@@ -559,17 +571,13 @@ export default {
       });
     },
     headerCellStyle(data) {
-       if (
-        (data.columnIndex >= 12 && data.columnIndex <= 15)
-      ) {
+      if (data.columnIndex >= 12 && data.columnIndex <= 15) {
         return "background:#FFFF66";
       }
       return "";
     },
     cellStyle(data) {
-       if (
-        (data.columnIndex >= 12 && data.columnIndex <= 15)
-      ) {
+      if (data.columnIndex >= 12 && data.columnIndex <= 15) {
         return "background:#FFFF66";
       }
       return "";
