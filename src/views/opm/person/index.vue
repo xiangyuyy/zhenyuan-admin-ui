@@ -243,6 +243,12 @@
           width="120"
           align="center"
         ></el-table-column>
+                <el-table-column
+          prop="drugSchool"
+          label="药监学校"
+          width="120"
+          align="center"
+        ></el-table-column>
         <el-table-column
           prop="drugPositionAll"
           label="职务或岗位"
@@ -571,13 +577,13 @@ export default {
       });
     },
     headerCellStyle(data) {
-      if (data.columnIndex >= 12 && data.columnIndex <= 15) {
+      if (data.columnIndex >= 12 && data.columnIndex <= 16) {
         return "background:#FFFF66";
       }
       return "";
     },
     cellStyle(data) {
-      if (data.columnIndex >= 12 && data.columnIndex <= 15) {
+      if (data.columnIndex >= 12 && data.columnIndex <= 16) {
         return "background:#FFFF66";
       }
       return "";
