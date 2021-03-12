@@ -53,7 +53,9 @@
         </el-form-item>
         <el-form-item>
           <el-button type="primary" @click="queryList">查询</el-button>
-                <el-button type="primary" plain @click="exportShopMemberRecord">导出</el-button>
+          <el-button type="primary" plain @click="exportShopMemberRecord"
+            >导出</el-button
+          >
         </el-form-item>
       </el-form>
     </el-card>
@@ -83,6 +85,13 @@
         <el-table-column
           prop="shopName"
           label="门店"
+          width="180"
+          align="center"
+        >
+        </el-table-column>
+        <el-table-column
+          prop="drugShopName"
+          label="药监门店"
           width="180"
           align="center"
         >
@@ -123,7 +132,7 @@
           align="center"
         ></el-table-column>
         <el-table-column
-          prop="drugOrg"
+          prop="drugTitle"
           label="药监职称"
           width="200"
           align="center"
@@ -194,7 +203,7 @@ import {
   getShopMemberRecordList,
   exportShopMemberRecordList,
 } from "@/api/dataReport";
-import { getAllDepartmentShop, getAllDrugChangeReason, } from "@/api/person";
+import { getAllDepartmentShop, getAllDrugChangeReason } from "@/api/person";
 export default {
   data() {
     return {
@@ -256,7 +265,7 @@ export default {
       this.getTableData();
     },
     //导出
-     exportShopMemberRecord() {
+    exportShopMemberRecord() {
       exportShopMemberRecordList(this.queryInfo).then((res) => {
         const blob = new Blob([res], {
           type:

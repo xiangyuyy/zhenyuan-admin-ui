@@ -213,6 +213,13 @@ export function sureChanges(sId) {
     })
 }
 
+export function cancelChanges(sId) {
+    return request({
+        url: '/drugReport/cancelChanges?shopId=' + sId,
+        method: 'get',
+    })
+}
+
 
 // 修改sort
 export function changeDrugReportMemberSort(id, sort) {

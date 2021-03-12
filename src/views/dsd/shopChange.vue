@@ -68,13 +68,7 @@
     </div>
 
     <div class="table-container">
-      <el-table
-        :data="userList"
-        :cell-style="cellStyle"
-        :header-cell-style="headerCellStyle"
-        border
-        style="width: 100%"
-      >
+      <el-table :data="userList" border style="width: 100%">
         <el-table-column label="功能" align="center" width="110">
           <template slot-scope="scope">
             <el-button
@@ -114,21 +108,21 @@
           label="年龄"
           align="center"
         ></el-table-column>
-                <el-table-column
+        <el-table-column
           prop="drugShopName"
           label="药监门店"
           width="180"
           align="center"
         ></el-table-column>
-                <!-- <el-table-column
+        <!-- <el-table-column
           prop="isInvitual"
           label="是否虚挂"
                     width="100"
           align="center"
         ></el-table-column> -->
-      <el-table-column
-          prop="drugOrg"
-          label="药监编制职称"
+        <el-table-column
+          prop="drugTitle"
+          label="药监上报职称"
           width="200"
           align="center"
         ></el-table-column>
@@ -197,6 +191,9 @@
     <div class="tiJiao_btn">
       <el-button type="primary" v-if="isShowChange" @click="tiJiaoChange"
         >提交变更</el-button
+      >
+      <el-button type="primary" v-if="isShowChange" @click="chexiaoChange"
+        >撤销变更</el-button
       >
     </div>
     <!-- 修改对话框 -->
@@ -626,6 +623,7 @@ import {
   addPersonal,
   isChangeStatus,
   sureChanges,
+  cancelChanges,
 } from "@/api/declare";
 import {
   getDrugPosition,
@@ -640,7 +638,7 @@ import {
   filterTree,
   getAllTitle,
   getAllDrugChangeReason,
-      getDrugSchoolOptions,
+  getDrugSchoolOptions,
 } from "@/api/person";
 
 const defaultToolForm = {
@@ -694,7 +692,7 @@ export default {
       drugShopOptions: null,
       drugMajorOptions: null,
       drugEducationOptions: null,
-      drugSchoolOptions:null,
+      drugSchoolOptions: null,
       changeReasonOptions: null,
       //控制变更对话框的显示
       dialogVisible: false,
@@ -876,7 +874,7 @@ export default {
       getMemberEducation(row.memberId).then((res) => {
         this.drugEducationOptions = res.data;
       });
-            // 获取药监学校
+      // 获取药监学校
       getDrugSchoolOptions(row.memberId).then((res) => {
         this.drugSchoolOptions = res.data;
       });
@@ -975,6 +973,19 @@ export default {
         }
       });
     },
+    //  撤销变更
+    chexiaoChange() {
+      cancelChanges(this.queryInfo.shopId).then((res) => {
+        console.log(res);
+        if (res.code === 200) {
+          this.queryInfo.pageNum = 1;
+          this.getUserList();
+          isChangeStatus(this.queryInfo.shopId).then((res) => {
+            this.isShowChange = res.data;
+          });
+        }
+      });
+    },
     cellDialogStyle(data) {
       if (data.columnIndex === 2) {
         return "background:#00FFCC";
@@ -996,7 +1007,6 @@ export default {
     this.getShopOptions();
     this.getChangeReason();
     this.getShopList();
-    
   },
 };
 </script>
@@ -1107,9 +1117,14 @@ export default {
   }
 }
 .tiJiao_btn {
-  width: 60px;
-  margin: 60px auto;
+  margin-top: 20px;
+  text-align: center;
+  .el-button {
+    padding: 15px 40px;
+    margin: 40px 20px;
+  }
 }
+
 .table-container {
   margin-top: 40px;
 }

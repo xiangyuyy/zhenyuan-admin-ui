@@ -105,8 +105,8 @@
           align="center"
         ></el-table-column> -->
         <el-table-column
-          prop="drugOrg"
-          label="药监编制职称"
+          prop="drugTitle"
+          label="药监上报职称"
           width="200"
           align="center"
         ></el-table-column>

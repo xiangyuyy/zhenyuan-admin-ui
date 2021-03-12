@@ -99,7 +99,7 @@
         </el-table-column>
         <el-table-column type="index" label="序号" align="center" width="60px">
         </el-table-column>
-        <el-table-column prop="id" label="单号" align="center">
+        <el-table-column prop="id" label="单号" width="140" align="center">
         </el-table-column>
         <el-table-column prop="shopName" label="门店" width="140" align="center">
         </el-table-column>
