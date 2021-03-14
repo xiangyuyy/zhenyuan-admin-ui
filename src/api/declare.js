@@ -110,6 +110,14 @@ export function passDrugReport(reportId) {
     })
 }
 
+export function cancelSureChanges(reportId) {
+    return request({
+        url: '/drugReport/cancelSureChanges?reportId=' + reportId,
+        method: 'get',
+    })
+}
+
+
 //审核按钮权限
 export function isCanSH() {
     return request({

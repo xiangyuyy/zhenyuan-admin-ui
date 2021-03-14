@@ -86,6 +86,13 @@
             >
               编辑明细
             </el-button>
+            <el-button
+              type="text"
+              v-if="scope.row.isChange === 0"
+              @click="cancelSureChanges(scope.row)"
+            >
+              撤销变更
+            </el-button>
             <el-button type="text" v-else @click="toChange(scope.row)">
               详情
             </el-button>
@@ -101,7 +108,12 @@
         </el-table-column>
         <el-table-column prop="id" label="单号" width="140" align="center">
         </el-table-column>
-        <el-table-column prop="shopName" label="门店" width="140" align="center">
+        <el-table-column
+          prop="shopName"
+          label="门店"
+          width="140"
+          align="center"
+        >
         </el-table-column>
         <el-table-column label="申报建立日期" width="141" align="center">
           <template slot-scope="scope"
@@ -111,7 +123,7 @@
         <el-table-column prop="operatorName" label="操作员" align="center">
         </el-table-column>
         <el-table-column label="EXCEL导出" align="center" width="300">
-          <template slot-scope="{row}">
+          <template slot-scope="{ row }">
             <a class="daochu" @click="drive_1(row)"> 普通导出</a>
             <a class="daochu" @click="drive_2(row)">含药监学校导出</a>
           </template>
@@ -141,6 +153,7 @@ import {
   getAllOperator,
   exportDrugReport,
   exportSpecialDrugReport,
+  cancelSureChanges,
 } from "@/api/declare";
 
 export default {
@@ -221,6 +234,17 @@ export default {
         query: { reportId: row.id, shopId: row.shopId },
       });
     },
+
+    //撤销变更
+    cancelSureChanges(row) {
+      cancelSureChanges(row.id).then((res) => {
+        if (res.code === 200) {
+          this.queryInfo.pageNum = 1;
+          this.getTableData();
+        }
+      });
+    },
+
     //变更
     toChange(row) {
       this.$router.push({ path: "/dsd/change/", query: { data: row } });
@@ -331,7 +355,7 @@ export default {
 }
 .daochu {
   color: blue;
-  &:nth-child(1){
+  &:nth-child(1) {
     margin-right: 20px;
   }
 }
