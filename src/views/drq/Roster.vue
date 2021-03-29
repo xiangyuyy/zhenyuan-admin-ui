@@ -34,6 +34,7 @@
               :options="shopOptions"
               :props="cascaderProps"
               :show-all-levels="false"
+              collapse-tags
               @change="handleChange"
             ></el-cascader>
           </el-form-item>
@@ -340,6 +341,7 @@ export default {
       shopIdList: [],
       shopOptions: [],
       cascaderProps: {
+        multiple: true,
         label: "label",
         value: "value",
         children: "children",
@@ -383,8 +385,17 @@ export default {
       });
     },
     handleChange(val) {
+      this.queryInfo.shopIds = [];
       this.shopIdList = val;
-      this.queryInfo.shopId = String([val[Array.from(val).length - 1]]);
+      for (let i = 0; i < val.length; i++) {
+        for (let j = 0; j < val[i].length; j++) {
+          if (j === val[i].length - 1) {
+            this.queryInfo.shopIds.push(val[i][j]);
+          }
+        }
+      }
+      this.queryInfo.shopIds = Array.from([...new Set(this.queryInfo.shopIds)]);
+      console.log(this.queryInfo.shopIds);
     },
     getTableData() {
       getDrugReportList(this.queryInfo).then((res) => {
