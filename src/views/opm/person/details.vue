@@ -18,7 +18,7 @@
         </el-row>
         <el-row>
           <el-col :span="8">
-            <label>参加工作时间：</label>
+            <label>进入本单位时间：</label>
             <span>{{ baseInfoData.workTime | formatDateTime }}</span>
           </el-col>
           <el-col :span="7">

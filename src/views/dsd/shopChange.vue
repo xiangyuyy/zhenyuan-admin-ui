@@ -379,7 +379,7 @@
               </el-form-item>
             </el-col>
             <el-col :span="12">
-              <el-form-item label="参加工作时间">
+              <el-form-item label="进入本单位时间">
                 <el-date-picker
                   v-model="dialogForm.workTime"
                   type="date"
@@ -591,11 +591,11 @@
       <!-- 分页 -->
       <div class="pagination-container">
         <el-pagination
-          @size-change="handleSizeChange"
-          @current-change="handleCurrentChange"
-          :current-page="queryInfo.pageNum"
+          @size-change="handlePensonSizeChange"
+          @current-change="handlePensonCurrentChange"
+          :current-page="addPersonDialogQuery.pageNum"
           :page-sizes="[1, 5, 10]"
-          :page-size="queryInfo.pageSize"
+          :page-size="addPersonDialogQuery.pageSize"
           layout="total, sizes, prev, pager, next, jumper"
           :total="total"
         >
@@ -777,6 +777,14 @@ export default {
     },
     // 查询人员
     queryPerson() {
+      this.addPersonDialogQuery.pageNum = 1;
+      getMemberList(this.addPersonDialogQuery).then((res) => {
+        this.personList = res.data.list;
+        this.total = res.data.total;
+      });
+    },
+        // 分页查询人员
+    queryPagePerson() {
       getMemberList(this.addPersonDialogQuery).then((res) => {
         this.personList = res.data.list;
         this.total = res.data.total;
@@ -903,6 +911,15 @@ export default {
     handleCurrentChange(newPage) {
       this.queryInfo.pageNum = newPage;
       this.getUserList();
+    },
+    handlePensonSizeChange(newSize) {
+      this.addPersonDialogQuery.pageNum = 1;
+      this.addPersonDialogQuery.pageSize = newSize;
+      this.queryPagePerson();
+    },
+    handlePensonCurrentChange(newPage) {
+      this.addPersonDialogQuery.pageNum = newPage;
+      this.queryPagePerson();
     },
     // headerCellStyle(data) {
     //   if (

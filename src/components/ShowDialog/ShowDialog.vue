@@ -193,7 +193,7 @@
               </el-form-item>
             </el-col>
             <el-col :span="12">
-              <el-form-item label="参加工作时间">
+              <el-form-item label="进入本单位时间">
                 <el-date-picker
                   v-model="dialogForm.workTime"
                   type="date"
