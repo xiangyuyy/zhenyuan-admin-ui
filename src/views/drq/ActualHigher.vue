@@ -41,7 +41,7 @@ import HeaderForm from "./components/HeaderForm";
 import { getgybzMemberList, exportgybzMemberList } from "@/api/dataReport";
 
 const defaultForm = {
-  shopName: null,
+  shopId: null,
   pageNum: 1,
   pageSize: 5,
 };
@@ -66,7 +66,7 @@ export default {
       });
     },
     exportExcel() {
-      exportgybzMemberList(this.queryForm.shopId).then((res) => {
+      exportgybzMemberList(this.queryForm).then((res) => {
         const blob = new Blob([res], {
           type:
             "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=utf-8",

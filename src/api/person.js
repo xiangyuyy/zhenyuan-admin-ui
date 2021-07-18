@@ -134,30 +134,32 @@ export function getAllDepartment() {
     })
 }
 
-// 导出所有人员
-export function exportMemberList() {
+// 导出人员
+export function exportMemberList(data) {
     return request({
         url: '/member/exportMemberList',
-        method: 'get',
+        method: 'post',
         responseType: 'blob',
+        data: data
     })
 }
 
 // 导出药监计算结果
-export function exportDrugCountList() {
+export function exportDrugCountList(data) {
     return request({
         url: '/drugReport/exportDrugCountList',
-        method: 'get',
+        method: 'post',
         responseType: 'blob',
+        data: data
     })
 }
 
 
 
-export function getDrugCountList(params) {
+export function getDrugCountList(data) {
     return request({
         url: '/drugReport/getDrugCountList',
-        method: 'get',
-        params: params
+        method: 'post',
+        data: data
     })
 }

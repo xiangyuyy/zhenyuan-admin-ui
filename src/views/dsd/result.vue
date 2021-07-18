@@ -4,17 +4,19 @@
     <el-card shadow="never">
       <label>门店</label>
       <el-cascader
-        expand-trigger="hover"
-        filterable
-        clearable
         v-model="shopIdList"
         :options="shopOptions"
         :props="cascaderProps"
         :show-all-levels="false"
+        clearable
+        collapse-tags
+        filterable
         @change="handleChange"
       ></el-cascader>
       <el-button type="primary" plain @click="query"> 查询 </el-button>
-      <el-button type="primary" plain @click="exportDrugCount">导出所有 </el-button>
+      <el-button type="primary" plain @click="exportDrugCount"
+        >导出所有
+      </el-button>
     </el-card>
 
     <el-table :data="tableData" border style="width: 100%">
@@ -58,9 +60,13 @@
 </template>
 
 <script>
-import { getAllDepartmentShop, getDrugCountList,exportDrugCountList } from "@/api/person";
+import {
+  getAllDepartmentShop,
+  getDrugCountList,
+  exportDrugCountList,
+} from "@/api/person";
 const defaultToolForm = {
-  shopId: null,
+  shopIds: [],
   subjection: null,
   chineseMedicine: null,
   longRange: null,
@@ -75,6 +81,7 @@ export default {
     return {
       shopOptions: [],
       cascaderProps: {
+        multiple: true,
         label: "label",
         value: "value",
         children: "children",
@@ -83,7 +90,7 @@ export default {
       shopIdList: [],
 
       queryInfo: {
-        shopId: null,
+        shopIds: null,
         pageNum: 1,
         pageSize: 5,
       },
@@ -102,17 +109,26 @@ export default {
       });
     },
     handleChange(val) {
-      this.queryInfo.shopId = val[val.length - 1];
+      this.queryInfo.shopIds = [];
+      this.shopIdList = val;
+      for (let i = 0; i < val.length; i++) {
+        for (let j = 0; j < val[i].length; j++) {
+          if (j === val[i].length - 1) {
+            this.queryInfo.shopIds.push(val[i][j]);
+          }
+        }
+      }
+      this.queryInfo.shopIds = Array.from([...new Set(this.queryInfo.shopIds)]);
+      console.log(this.queryInfo.shopIds);
     },
     query() {
       this.getTableData();
     },
     //导出
-     exportDrugCount() {
-      exportDrugCountList().then((res) => {
+    exportDrugCount() {
+      exportDrugCountList(this.queryInfo).then((res) => {
         const blob = new Blob([res], {
-          type:
-            "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=utf-8",
+          type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=utf-8",
         });
         var time = new Date();
         time =
@@ -148,14 +164,13 @@ export default {
 <style lang="scss" scoped>
 .app-container {
   padding: 40px;
-  .el-card{
+  .el-card {
     padding-left: 20px;
     margin: 20px 0;
-    label{
+    label {
       margin-right: 15px;
-
     }
-    .el-button{
+    .el-button {
       padding: 10px 30px;
       margin-left: 60px;
     }

@@ -18,72 +18,85 @@ export function getMemberRecordList(params) {
 
 
 // 部门申报变更记录查询列表
-export function getShopMemberRecordList(params) {
+export function getShopMemberRecordList(data) {
     return request({
         url: '/dataReport/getShopMemberRecordList',
-        method: 'get',
-        params: params
+        method: 'post',
+        data: data
     })
 }
 // 实际高于编制
-export function getgybzMemberList(params) {
+export function getgybzMemberList(data) {
     return request({
         url: '/dataReport/getgybzMemberList',
-        method: 'get',
-        params: params
+        method: 'post',
+        data: data
     })
 }
 
 // 实际虚挂人员
-export function getsjxgMemberList(params) {
+export function getsjxgMemberList(data) {
     return request({
         url: '/dataReport/getsjxgMemberList',
-        method: 'get',
-        params: params
+        method: 'post',
+        data: data
     })
 }
 // 本店虚挂人员
-export function getbdxgMemberList(params) {
+export function getbdxgMemberList(data) {
     return request({
         url: '/dataReport/getbdxgMemberList',
-        method: 'get',
-        params: params
+        method: 'post',
+        data: data
     })
 }
 
 // 实际与编制相同人员
-export function getbzxtMemberList(params) {
+export function getbzxtMemberList(data) {
     return request({
         url: '/dataReport/getbzxtMemberList',
-        method: 'get',
-        params: params
+        method: 'post',
+        data: data
     })
 }
 
 // 导出实际高于
-export function exportgybzMemberList(sId) {
+export function exportgybzMemberList(data) {
     return request({
-        url: '/dataReport/exportgybzMemberList?shopId=' + sId,
-        method: 'get',
-        responseType: 'blob'
+        url: '/dataReport/exportgybzMemberList',
+        method: 'post',
+        responseType: 'blob',
+        data: data
     })
 }
 
 // 导出实际虚挂人员
-export function exportsjxgMemberList(sId) {
+export function exportsjxgMemberList(data) {
     return request({
-        url: '/dataReport/exportsjxgMemberList?shopId=' + sId,
-        method: 'get',
-        responseType: 'blob'
+        url: '/dataReport/exportsjxgMemberList',
+        method: 'post',
+        responseType: 'blob',
+        data: data
     })
 }
 
 // 导出本店虚挂人员
-export function exportbdxgMemberList(sId) {
+export function exportbdxgMemberList(data) {
     return request({
-        url: '/dataReport/exportbdxgMemberList?shopId=' + sId,
-        method: 'get',
+        url: '/dataReport/exportbdxgMemberList',
+        method: 'post',
         responseType: 'blob',
+        data: data
+    })
+}
+
+// 导出编制相同人员
+export function exportbzxtMemberList(data) {
+    return request({
+        url: '/dataReport/exportbzxtMemberList',
+        method: 'post',
+        responseType: 'blob',
+        data: data
     })
 }
 
@@ -94,13 +107,5 @@ export function exportShopMemberRecordList(params) {
         method: 'get',
         params: params,
         responseType: 'blob',
-    })
-}
-// 导出编制相同人员
-export function exportbzxtMemberList(sId) {
-    return request({
-        url: '/dataReport/exportbzxtMemberList?shopId=' + sId,
-        method: 'get',
-        responseType: 'blob'
     })
 }

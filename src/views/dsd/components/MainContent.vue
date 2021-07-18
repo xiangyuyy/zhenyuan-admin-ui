@@ -118,7 +118,7 @@
         width="160"
         align="center"
       ></el-table-column>
-      <el-table-column label="参加专业工作时间" width="180" align="center">
+      <el-table-column label="进入本单位时间" width="180" align="center">
         <template slot-scope="scope">
           {{ scope.row.workTime | formatDateTime }}
         </template>

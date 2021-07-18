@@ -123,7 +123,7 @@
         <el-form-item>
           <el-button type="primary" @click="queryPerson">查询</el-button>
           <el-button type="primary" @click="exportMember"
-            >导出所有人员</el-button
+            >导出人员</el-button
           >
         </el-form-item>
       </el-form>
@@ -261,11 +261,17 @@
           width="120"
           align="center"
         ></el-table-column>
-        <el-table-column label="参加专业工作时间" width="180" align="center">
+        <el-table-column label="进入本单位时间" width="180" align="center">
           <template slot-scope="scope">
             {{ scope.row.workTime | formatDateTime }}
           </template>
         </el-table-column>
+           <el-table-column
+          prop="nowAdress"
+          label="现居住地址"
+          width="120"
+          align="center"
+        ></el-table-column>
         <el-table-column label="健康状况" width="120" align="center">
           <template slot-scope="{ row }">
             <span v-if="row.healthStatus === 0">不健康</span>
@@ -432,7 +438,7 @@ export default {
         background: "rgba(0, 0, 0, 0.7)", //遮罩层颜色
       };
       let loadingInstance = Loading.service(options);
-      exportMemberList().then((res) => {
+      exportMemberList(this.queryInfo).then((res) => {
         const blob = new Blob([res], {
           type:
             "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=utf-8",

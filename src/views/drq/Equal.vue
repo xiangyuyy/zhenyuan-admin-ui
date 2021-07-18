@@ -73,7 +73,7 @@ export default {
       });
     },
     exportExcel() {
-      exportbzxtMemberList(this.queryForm.shopId).then((res) => {
+      exportbzxtMemberList(this.queryForm).then((res) => {
         const blob = new Blob([res], {
           type:
             "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=utf-8",

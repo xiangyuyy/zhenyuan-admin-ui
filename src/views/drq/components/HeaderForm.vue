@@ -2,14 +2,15 @@
   <div>
     <el-card shadow="never">
       <el-form :inline="true" :model="form">
-        <el-form-item label="门店">
+        <el-form-item label="门店/区域">
           <el-cascader
-            expand-trigger="hover"
-            filterable
             v-model="shopIdList"
             :options="shopOptions"
             :props="cascaderProps"
             :show-all-levels="false"
+            clearable
+            collapse-tags
+            filterable
             @change="handleChange"
           ></el-cascader>
         </el-form-item>
@@ -22,17 +23,16 @@
     </el-card>
     <el-row>
       <el-col :span="4">
-        <el-button type="primary" @click="$emit('export-excel')">导出</el-button>
+        <el-button type="primary" @click="$emit('export-excel')"
+          >导出</el-button
+        >
       </el-col>
     </el-row>
   </div>
 </template>
 
 <script>
-import {
-  getAllDepartmentShop,
-  filterTree,
-} from "@/api/person";
+import { getAllDepartmentShop, filterTree } from "@/api/person";
 export default {
   props: ["queryForm"],
   data() {
@@ -41,6 +41,7 @@ export default {
       shopOptions: [],
       //门店
       cascaderProps: {
+        multiple: true,
         label: "label",
         value: "value",
         children: "children",
@@ -53,7 +54,7 @@ export default {
       this.form = this.queryForm;
     },
   },
-  created(){
+  created() {
     this.getShopOptions();
   },
   methods: {
@@ -63,11 +64,24 @@ export default {
         this.shopOptions = [filterTree(res.data[0])];
       });
     },
+    // handleChange(val) {
+    //   this.shopIdList = val;
+    //   this.shopId = String([val[Array.from(val).length - 1]]);
+    //   console.log(this.shopId);
+    //   this.form.shopId = this.shopId;
+    // },
     handleChange(val) {
+      this.form.shopIds = [];
       this.shopIdList = val;
-      this.shopId = String([val[Array.from(val).length - 1]]);
-      console.log(this.shopId);
-      this.form.shopId = this.shopId;
+      for (let i = 0; i < val.length; i++) {
+        for (let j = 0; j < val[i].length; j++) {
+          if (j === val[i].length - 1) {
+            this.form.shopIds.push(val[i][j]);
+          }
+        }
+      }
+      this.form.shopIds = Array.from([...new Set(this.queryInfo.shopIds)]);
+      console.log(this.form.shopIds);
     },
   },
 };
